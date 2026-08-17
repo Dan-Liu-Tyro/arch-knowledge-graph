@@ -60,6 +60,14 @@ uncitable entry is a projection and reads as authoritative anyway. Prefer record
 recording conclusions — a profile that only reproduces conclusions cannot push back,
 and pushback is wanted.
 
+Entries are tracked hypotheses or preferences, not settled conclusions — see
+`principles/evidence-over-assumed-best-practice.md`. Tag each piece of evidence
+`**Supports.**` or `**Contradicts.**`, and set `status`
+(`active`/`reinforced`/`contested`/`revised`/`abandoned`) to match what the evidence
+actually shows. `reindex.py` refuses to build the index if a principle has
+`contradict > 0` without an acknowledging status — never leave a contradicted
+principle at `active`/`reinforced`.
+
 `meta/token-tracking/summarize.py --by branch` gives per-feature cost. Compare
 tasks on `output` and `cache_wr`, never on cache reads — those scale with
 conversation length, not with work done.

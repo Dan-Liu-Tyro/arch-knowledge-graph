@@ -87,6 +87,16 @@ plain RAG.
      expensive are stated inline in `CLAUDE.md` rather than only in the component.
      `architecture-learning` is explicitly deprioritised behind the
      challenging-thinking-partner behaviour.
+   - Refined `architecture-learning` again: every entry is a tracked hypothesis or
+     preference, never a settled conclusion. Rationale stated directly — "it's
+     unclear whether we can see [best practice] clearly beforehand", so decisions
+     should be tracked individually over time and marked as supported or
+     contradicted as new evidence arrives, building intuition from a track record
+     rather than asserting one. `form` (`hypothesis`/`preference`) is tracked
+     separately from `kind` (subject matter), and `status`
+     (`active`/`reinforced`/`contested`/`revised`/`abandoned`) replaces a
+     hand-set confidence level. The index generator enforces the one invariant that
+     matters: contradicting evidence can never sit under an unacknowledged status.
    - `token-tracking` reports cost by day, rolling five-hour window (matching how
      usage limits are enforced), git branch, effort level, and model. Plan
      allowance is **not** available locally — verified against the transcripts — so

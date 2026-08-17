@@ -1,9 +1,11 @@
 ---
 id: generated-outputs-are-not-sources
 kind: architectural
+form: hypothesis
+status: active
 type: inferred
-confidence: strong
-evidence: 1
+support: 1
+contradict: 0
 updated: 2026-08-17
 ---
 
@@ -23,3 +25,7 @@ bare mechanism.
 published page is hand-edited. Overwriting silently destroys work; detecting
 divergence costs code; locking pages may make both moot. Worth settling before the
 publisher is built.
+
+## Status history
+
+- 2026-08-17 · created → active

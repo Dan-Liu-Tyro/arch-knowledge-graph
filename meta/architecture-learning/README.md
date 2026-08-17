@@ -1,7 +1,13 @@
 # architecture-learning
 
 An accumulating, evidence-based model of how one architect reasons — built from
-working on this project.
+working on this project, and built on a specific epistemic stance: no position
+recorded here is treated as settled. Each one is a hypothesis or a preference,
+tracked individually over time, and revised or abandoned when evidence says so. See
+[`principles/evidence-over-assumed-best-practice.md`](principles/evidence-over-assumed-best-practice.md)
+for the reasoning — the position that "there is usually a best practice, but it's
+unclear whether it's visible in advance" is itself the entry that governs how every
+other entry is written.
 
 **Deprioritised on the consumption side**, by explicit instruction: no consumer is
 wired up, and it should not absorb a turn for its own sake. But recording continues
@@ -56,33 +62,80 @@ evidence. So:
 Compare the flat file, where every one of those cost a full read. The index is 4×
 cheaper than the old file *already*, at only ten principles.
 
+## Hypotheses, not conclusions
+
+Every entry is one of two **forms**:
+
+- **`hypothesis`** — a testable belief about what will work. Can be reinforced by
+  repetition, and genuinely *contradicted* by an outcome that goes the other way.
+  "Curation over accumulation" predicts something checkable: does the review gate
+  actually catch bad content, or get bypassed under pressure?
+- **`preference`** — a stated value with no outcome to check. "Decisions are
+  artifacts" isn't refuted by any future event; it can only be abandoned if the
+  user later says they no longer want it. Preferences still move — `abandoned`
+  replaces `refuted` for this form — but nothing "disconfirms" a preference the way
+  an outcome disconfirms a hypothesis.
+
+Conflating the two produces exactly the failure the tracking system exists to
+avoid: treating a taste as if it had been tested, or treating a tested belief as if
+it were merely a taste.
+
+Every entry also carries a **status**, which is the thing that is actually allowed
+to change as evidence comes in:
+
+| status | means |
+|---|---|
+| `active` | One instance so far. Not yet tested again. |
+| `reinforced` | Repeated supporting evidence, no contradiction. |
+| `contested` | Both supporting and contradicting evidence exist. |
+| `revised` | Superseded by an updated version of the same position — kept, not deleted, for the record. |
+| `abandoned` | Evidence, or a later statement, undermined it enough that it's no longer held. |
+
+**The bar for creating a principle file is low; the bar for calling it `reinforced`
+is not.** Write one down the first time an observation looks worth watching, even
+from a single instance — that's what `status: active` means. Repetition earns
+`reinforced`. Confidence language (`strong`/`moderate`) is gone; it invited exactly
+the premature certainty this redesign exists to remove.
+
 ## Working practice
 
 1. **During a conversation**, append to `observations.md`. One line, no ceremony.
    Do not stop to decide whether it matters.
-2. **When an observation looks like a pattern**, read `INDEX.md`. If it belongs to an
-   existing principle, open that one file, add the evidence line, and bump
-   `evidence` in its frontmatter. If it is genuinely new, write a new principle file.
-3. **Run `python3 meta/architecture-learning/reindex.py`** after any frontmatter or
-   heading change. The index is generated so it cannot drift; a stale routing table
-   would be worse than none.
-4. **Mark the observation** with the principle id it fed, or leave it `unpromoted`.
-   Unpromoted entries are the honest default.
+2. **When an observation looks worth tracking**, read `INDEX.md`. If it agrees with
+   an existing principle, open that file, add a `- **Supports.**` bullet, and
+   increment `support` in its frontmatter. If it disagrees, add a
+   `- **Contradicts.**` bullet, increment `contradict`, and update `status` to
+   `contested` (or `revised`/`abandoned` if the disagreement is decisive) — do not
+   leave a contradicted principle at `active`/`reinforced`; `reindex.py` will refuse
+   to build if you do. If it's genuinely new, write a new principle file at
+   `status: active`.
+3. **Append a line to that file's `## Status history`** whenever status changes,
+   with the date and a one-line reason. This is the literal timeline the tracking
+   exists to produce.
+4. **Run `python3 meta/architecture-learning/reindex.py`** after any frontmatter or
+   heading change. The index is generated so it cannot drift, and it refuses to
+   build if contradicting evidence isn't acknowledged in `status` — see the module
+   docstring.
+5. **Mark the observation** with `supports:<id>` or `contradicts:<id>`, or leave it
+   `unpromoted`. Unpromoted is the honest default.
 
 ## Frontmatter
 
 ```yaml
 ---
-id: curation-over-accumulation   # matches filename stem
-kind: architectural | working    # architectural is the substance; working is process
-type: stated | inferred          # said outright, or observed from choices
-confidence: strong | moderate | tentative
-evidence: 2                      # count of evidence items in the file
-updated: 2026-08-17
+id: curation-over-accumulation      # matches filename stem
+kind: architectural | working       # subject matter: substance vs. process
+form: hypothesis | preference       # epistemic status — see above
+status: active | reinforced | contested | revised | abandoned
+type: stated | inferred             # said outright, or observed from choices
+support: 2                          # count of supporting evidence items
+contradict: 0                       # count of contradicting evidence items
+updated: 2026-08-18
 ---
 ```
 
-`reindex.py` fails loudly on a missing field rather than emitting a partial index.
+`reindex.py` fails loudly on a missing field, and on a `contradict > 0` /
+`status: active` mismatch, rather than emitting a partial or dishonest index.
 
 Deliberately **not** the KG schema from `components/kg-core/SCHEMA.md`, even though
 the shapes are close. Using it here would be a cheap way to pressure-test that schema
@@ -98,14 +151,20 @@ style. Merging would promote personal preference to organisational canon.
 **Do not optimise for agreement.** A profile that only reproduces conclusions is a
 cache, and a perfectly aligned model cannot challenge its subject — which is the
 explicit requirement here. So principle files record *how* a decision was reached,
-and `## Contested history` sections record positions that were argued and changed.
-Those sections are the highest-value content, because they show which arguments land.
+and status-history entries that describe a challenge-and-reaffirm episode (e.g.
+`curation-over-accumulation.md`) are the highest-value content, because they show
+which arguments actually land.
 
-## Evolution is git, not a changelog
+## Evolution is tracked twice, on purpose
 
-No entry tracks its own revision history. `git log --follow principles/<file>` is
-that history, with authorship and diffs, and it is free. `updated` in frontmatter
-exists only so the index can be sorted and scanned, not as a substitute.
+`## Status history` inside each file is the curated, human-readable timeline —
+short, dated, one line per status change, written to be read without opening git.
+`git log --follow principles/<file>` is the complete, uncurated version of the same
+thing, with full diffs and authorship, and it is free. The two are not redundant:
+the status history is what you read to understand *why* a position moved; git is
+what you read to see *exactly what changed* if the summary isn't enough. `updated`
+in frontmatter exists only so the index can be sorted, not as a substitute for
+either.
 
 ## Division from the other meta components
 

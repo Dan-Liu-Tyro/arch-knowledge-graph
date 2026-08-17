@@ -4,6 +4,11 @@
 The index is the only file read on a normal session, so it must never be stale.
 A hand-maintained index would drift; this makes drift impossible.
 
+Enforces one invariant: a principle with contradict > 0 must carry a status of
+contested, revised, or abandoned. Contradicting evidence sitting under
+status: active/reinforced would mean the tracking system is quietly ignoring the
+thing it exists to surface — see evidence-over-assumed-best-practice.md.
+
 Usage: python3 meta/architecture-learning/reindex.py
 """
 
@@ -11,8 +16,11 @@ import glob
 import os
 import sys
 
+FIELDS = ("id", "kind", "form", "status", "type", "support", "contradict", "updated")
+ACK_STATUSES = {"contested", "revised", "abandoned"}
+STATUS_ORDER = {"contested": 0, "revised": 1, "active": 2, "reinforced": 3, "abandoned": 4}
+
 HERE = os.path.dirname(os.path.abspath(__file__))
-FIELDS = ("id", "kind", "type", "confidence", "evidence", "updated")
 
 
 def parse(path):
@@ -38,16 +46,37 @@ def parse(path):
     missing = [f for f in FIELDS if f not in meta]
     if missing:
         sys.exit(f"{path}: frontmatter missing {', '.join(missing)}")
+
+    if int(meta["contradict"]) > 0 and meta["status"] not in ACK_STATUSES:
+        sys.exit(
+            f"{path}: contradict={meta['contradict']} but status={meta['status']!r} "
+            f"— contradicting evidence must be acknowledged via status "
+            f"({', '.join(sorted(ACK_STATUSES))}), not left as {meta['status']!r}"
+        )
+
     meta["statement"] = heading or "(no heading)"
     meta["file"] = os.path.basename(path)
     return meta
 
 
-def main():
-    entries = [parse(p) for p in sorted(glob.glob(os.path.join(HERE, "principles", "*.md")))]
-    if not entries:
-        sys.exit("no principle files found")
+def render_table(rows):
+    out = ["| statement | status | form | support | contradict | file |",
+           "|---|---|---|---|---|---|"]
+    for e in rows:
+        out.append(
+            f"| {e['statement']} | {e['status']} | {e['form']} | {e['support']} | "
+            f"{e['contradict']} | [`{e['file']}`](principles/{e['file']}) |"
+        )
+    return out
 
+
+def main():
+    paths = sorted(glob.glob(os.path.join(HERE, "principles", "*.md")))
+    if not paths:
+        sys.exit("no principle files found")
+    entries = [parse(p) for p in paths]
+
+    contested = [e for e in entries if e["status"] in ("contested", "revised")]
     by_kind = {}
     for entry in entries:
         by_kind.setdefault(entry["kind"], []).append(entry)
@@ -61,25 +90,42 @@ def main():
         "session. To decide whether a new observation is evidence for an existing",
         "principle or a new one, read this; then open at most one principle file.",
         "",
-        f"{len(entries)} principles, "
-        f"{sum(int(e['evidence']) for e in entries)} pieces of evidence.",
+        "Each entry is a tracked hypothesis or preference, not a settled conclusion —",
+        "see `evidence-over-assumed-best-practice.md`. `status` reflects what the",
+        "evidence has actually shown: `active` (one instance, not yet tested again),",
+        "`reinforced` (repeated support, no contradiction), `contested` (support and",
+        "contradiction both exist), `revised` (superseded by an updated version),",
+        "`abandoned` (evidence or a later statement undermined it).",
+        "",
+        f"{len(entries)} entries, "
+        f"{sum(int(e['support']) for e in entries)} supporting and "
+        f"{sum(int(e['contradict']) for e in entries)} contradicting evidence items.",
         "",
     ]
+
+    if contested:
+        out += ["## Contested or revised — read these first", ""]
+        out += render_table(sorted(contested, key=lambda e: e["id"]))
+        out += [""]
+    else:
+        out += ["## Contested or revised", "",
+                "None currently. That is expected while evidence is thin, not a sign",
+                "the tracking is switched off — this section populates itself the",
+                "first time real contradicting evidence shows up.", ""]
+
     for kind in ("architectural", "working"):
         rows = by_kind.get(kind, [])
         if not rows:
             continue
         label = {"architectural": "Architectural positions",
-                 "working": "Working preferences"}[kind]
-        out += [f"## {label}", "",
-                "| statement | confidence | type | evidence | file |",
-                "|---|---|---|---|---|"]
-        for e in sorted(rows, key=lambda r: (-int(r["evidence"]), r["id"])):
-            out.append(
-                f"| {e['statement']} | {e['confidence']} | {e['type']} | "
-                f"{e['evidence']} | [`{e['file']}`](principles/{e['file']}) |"
-            )
-        out.append("")
+                  "working": "Working preferences"}[kind]
+        ordered = sorted(
+            rows,
+            key=lambda e: (STATUS_ORDER.get(e["status"], 9), -int(e["support"]), e["id"]),
+        )
+        out += [f"## {label}", ""]
+        out += render_table(ordered)
+        out += [""]
 
     unknown = set(by_kind) - {"architectural", "working"}
     if unknown:
@@ -88,7 +134,8 @@ def main():
 
     with open(os.path.join(HERE, "INDEX.md"), "w") as handle:
         handle.write("\n".join(out))
-    print(f"wrote INDEX.md — {len(entries)} principles")
+    flag = f", {len(contested)} contested/revised" if contested else ""
+    print(f"wrote INDEX.md — {len(entries)} entries{flag}")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,11 @@
 ---
 id: verify-state-claims
 kind: working
+form: preference
+status: active
 type: inferred
-confidence: moderate
-evidence: 1
+support: 1
+contradict: 0
 updated: 2026-08-17
 ---
 
@@ -20,3 +22,7 @@ from main is my focus", pressing until it was demonstrated rather than described
 
 **Implication.** Demonstrate rather than assert. Run the command and show output in
 preference to explaining what would happen.
+
+## Status history
+
+- 2026-08-17 · created → active

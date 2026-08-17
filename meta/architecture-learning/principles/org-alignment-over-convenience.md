@@ -1,9 +1,11 @@
 ---
 id: org-alignment-over-convenience
 kind: working
+form: preference
+status: active
 type: stated
-confidence: strong
-evidence: 1
+support: 1
+contradict: 0
 updated: 2026-08-17
 ---
 
@@ -21,3 +23,7 @@ and merge PRs directly rather than keeping a deviation.
 to an environment limitation. Prefer working within it, or handing over a command to
 run where the limit does not apply. The operational form of this lesson is recorded
 in `meta/procedural-memory/lessons.md`.
+
+## Status history
+
+- 2026-08-17 · created → active

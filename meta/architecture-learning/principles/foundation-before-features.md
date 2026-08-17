@@ -1,9 +1,11 @@
 ---
 id: foundation-before-features
 kind: architectural
+form: hypothesis
+status: active
 type: stated
-confidence: strong
-evidence: 1
+support: 1
+contradict: 0
 updated: 2026-08-17
 ---
 
@@ -24,3 +26,7 @@ piece of foundation is *the right one* — not whether foundation should come fi
 That reframes my objection rather than dismissing it: the schema-versus-scaffolding
 question is still live, but as "is this the foundation that matters most next," not
 "should we be building foundation at all."
+
+## Status history
+
+- 2026-08-17 · created → active

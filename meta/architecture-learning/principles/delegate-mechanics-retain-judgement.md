@@ -1,9 +1,11 @@
 ---
 id: delegate-mechanics-retain-judgement
 kind: working
+form: preference
+status: active
 type: stated
-confidence: moderate
-evidence: 1
+support: 1
+contradict: 0
 updated: 2026-08-17
 ---
 
@@ -16,3 +18,7 @@ delegated commit mechanics as a standing instruction, and "fix it based on your
 judgement" delegated the content of a doc update. Meanwhile the branch name was
 chosen personally ("plan"), the settings revert was done personally, and merges were
 retained.
+
+## Status history
+
+- 2026-08-17 · created → active

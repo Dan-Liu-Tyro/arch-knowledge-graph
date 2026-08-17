@@ -6,24 +6,38 @@ This is the routing table, and the only file that needs reading on a normal
 session. To decide whether a new observation is evidence for an existing
 principle or a new one, read this; then open at most one principle file.
 
-10 principles, 17 pieces of evidence.
+Each entry is a tracked hypothesis or preference, not a settled conclusion —
+see `evidence-over-assumed-best-practice.md`. `status` reflects what the
+evidence has actually shown: `active` (one instance, not yet tested again),
+`reinforced` (repeated support, no contradiction), `contested` (support and
+contradiction both exist), `revised` (superseded by an updated version),
+`abandoned` (evidence or a later statement undermined it).
+
+11 entries, 17 supporting and 0 contradicting evidence items.
+
+## Contested or revised
+
+None currently. That is expected while evidence is thin, not a sign
+the tracking is switched off — this section populates itself the
+first time real contradicting evidence shows up.
 
 ## Architectural positions
 
-| statement | confidence | type | evidence | file |
-|---|---|---|---|---|
-| Choose the least infrastructure that meets the need, and name the revisit trigger | strong | inferred | 3 | [`least-infrastructure-first.md`](principles/least-infrastructure-first.md) |
-| Structure for extraction before there is a plan to extract | strong | stated | 3 | [`structure-for-extraction.md`](principles/structure-for-extraction.md) |
-| Curation beats accumulation — the quality gate is the architecture | strong | inferred | 2 | [`curation-over-accumulation.md`](principles/curation-over-accumulation.md) |
-| Decisions are artifacts; the reasoning is the thing worth keeping | strong | inferred | 2 | [`decisions-are-artifacts.md`](principles/decisions-are-artifacts.md) |
-| Instrument before there is a question to answer | strong | stated | 2 | [`instrument-before-the-question.md`](principles/instrument-before-the-question.md) |
-| Getting the foundation right outranks starting the visible work | strong | stated | 1 | [`foundation-before-features.md`](principles/foundation-before-features.md) |
-| Generated outputs must never become sources of truth | strong | inferred | 1 | [`generated-outputs-are-not-sources.md`](principles/generated-outputs-are-not-sources.md) |
+| statement | status | form | support | contradict | file |
+|---|---|---|---|---|---|
+| Treat architectural positions as revisable hypotheses, not settled best practice | active | preference | 1 | 0 | [`evidence-over-assumed-best-practice.md`](principles/evidence-over-assumed-best-practice.md) |
+| Getting the foundation right outranks starting the visible work | active | hypothesis | 1 | 0 | [`foundation-before-features.md`](principles/foundation-before-features.md) |
+| Generated outputs must never become sources of truth | active | hypothesis | 1 | 0 | [`generated-outputs-are-not-sources.md`](principles/generated-outputs-are-not-sources.md) |
+| Structure for extraction before there is a plan to extract | reinforced | hypothesis | 3 | 0 | [`structure-for-extraction.md`](principles/structure-for-extraction.md) |
+| Curation beats accumulation — the quality gate is the architecture | reinforced | hypothesis | 2 | 0 | [`curation-over-accumulation.md`](principles/curation-over-accumulation.md) |
+| Decisions are artifacts; the reasoning is the thing worth keeping | reinforced | preference | 2 | 0 | [`decisions-are-artifacts.md`](principles/decisions-are-artifacts.md) |
+| Instrument before there is a question to answer | reinforced | hypothesis | 2 | 0 | [`instrument-before-the-question.md`](principles/instrument-before-the-question.md) |
+| Choose the least infrastructure that meets the need, and name the revisit trigger | reinforced | hypothesis | 2 | 0 | [`least-infrastructure-first.md`](principles/least-infrastructure-first.md) |
 
 ## Working preferences
 
-| statement | confidence | type | evidence | file |
-|---|---|---|---|---|
-| Delegate mechanics, retain judgement | moderate | stated | 1 | [`delegate-mechanics-retain-judgement.md`](principles/delegate-mechanics-retain-judgement.md) |
-| Organisational alignment beats local convenience | strong | stated | 1 | [`org-alignment-over-convenience.md`](principles/org-alignment-over-convenience.md) |
-| Claims about system state get verified, not taken on trust | moderate | inferred | 1 | [`verify-state-claims.md`](principles/verify-state-claims.md) |
+| statement | status | form | support | contradict | file |
+|---|---|---|---|---|---|
+| Delegate mechanics, retain judgement | active | preference | 1 | 0 | [`delegate-mechanics-retain-judgement.md`](principles/delegate-mechanics-retain-judgement.md) |
+| Organisational alignment beats local convenience | active | preference | 1 | 0 | [`org-alignment-over-convenience.md`](principles/org-alignment-over-convenience.md) |
+| Claims about system state get verified, not taken on trust | active | preference | 1 | 0 | [`verify-state-claims.md`](principles/verify-state-claims.md) |
