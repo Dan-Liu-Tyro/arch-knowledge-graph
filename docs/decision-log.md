@@ -51,7 +51,16 @@ plain RAG.
    (b) Confluence publish + Rovo-facing grounding outbound, (c) local access
    for Claude Code. Goal: swapping "local file reads" for "a deployed query
    service" later is a transport change, not a redesign.
-3. **Confluence flow (planned direction, not yet designed in detail):** curate
+3. **Repo is structured as loosely coupled components, not one application.**
+   Six components under `components/`, each with a README stating its purpose,
+   boundary, dependencies, and extraction notes. Rationale: some of these will
+   outgrow this repo and be promoted into their own project or handed to another
+   team — most likely `query-service`, which is the only one needing its own
+   deployment lifecycle — so extraction should be a move operation rather than an
+   untangling exercise. Dependencies point inward to `kg-core`; integration
+   components never import each other. This is the structural expression of
+   decision 2. Full rules in `docs/component-model.md`.
+4. **Confluence flow (planned direction, not yet designed in detail):** curate
    truth in the local git KG → generate structured pages (one per entity,
    consistent template) → publish into a dedicated Confluence space (user has
    control over creating this) → Rovo indexes that clean space for grounding.
