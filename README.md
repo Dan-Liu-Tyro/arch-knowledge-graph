@@ -26,3 +26,13 @@ dependency rules, and promotion criteria.
 
 Start with [`components/kg-core/SCHEMA.md`](components/kg-core/SCHEMA.md) — the
 schema is the critical path, and everything else is shaped by it.
+
+## Meta
+
+[`meta/`](meta) holds components that observe the process of building this project
+rather than participating in it. `components/` must never depend on them.
+
+| Meta component | Purpose |
+|---|---|
+| [`architecture-learning`](meta/architecture-learning) | Evidence-based record of demonstrated architectural style |
+| [`token-tracking`](meta/token-tracking) | Granular token consumption data and a summariser |

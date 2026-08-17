@@ -25,7 +25,19 @@ components/confluence-ingest/    inbound: Confluence pages → draft entities
 components/confluence-publish/   outbound: entities → generated pages
 components/query-service/        v2, deferred — do not build yet
 components/claude-code-access/   local query glue for Claude Code
+meta/architecture-learning/      evidence-based record of demonstrated style
+meta/token-tracking/             token usage data + summarize.py
 ```
+
+`meta/` observes the process of building the project rather than participating in
+it. **`components/` must never depend on `meta/`** — that would tie an extractable
+component to this project's history. `meta/token-tracking/summarize.py` is the
+repo's only executable file.
+
+Entries in `meta/architecture-learning/` require cited evidence and are marked
+`stated` or `inferred` with a confidence level. Do not add an entry you cannot
+point to a specific interaction for; an uncitable entry is a projection and reads
+as authoritative anyway.
 
 Each component's `README.md` states its purpose, boundary, dependencies, and
 extraction notes, and is treated as its contract — if a change makes a README
@@ -64,7 +76,8 @@ cross-references:
    → Rovo indexes that space. Architects edit git, never raw Confluence.
 4. **Components over one application.** Six components under `components/`, sized
    so that pieces which outgrow this repo can be promoted out as a move rather
-   than an untangling. See the Layout section above.
+   than an untangling. Plus a `meta/` tier that observes the project without being
+   part of it. See the Layout section above.
 
 The graph shape is the point: typed relationships (`pattern REQUIRES guardrail`,
 `principle CONFLICTS_WITH pattern`, `decision SUPERSEDES decision`,

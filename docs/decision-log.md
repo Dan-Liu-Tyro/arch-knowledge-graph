@@ -60,7 +60,17 @@ plain RAG.
    untangling exercise. Dependencies point inward to `kg-core`; integration
    components never import each other. This is the structural expression of
    decision 2. Full rules in `docs/component-model.md`.
-4. **Confluence flow (planned direction, not yet designed in detail):** curate
+4. **A `meta/` tier for components that observe the project.** Separate from
+   `components/`, holding work that accumulates knowledge about *how we work*
+   rather than about Tyro's architecture: `architecture-learning` (an
+   evidence-based record of demonstrated architectural style, so later work can
+   apply it deliberately instead of guessing) and `token-tracking` (granular token
+   consumption, so task cost can be reasoned about from data). Hard rule:
+   `components/` must never depend on `meta/`, since that would tie an otherwise
+   extractable component to this project's history. Both meta components are built
+   around evidence and provenance — cited observations, derived metrics — because
+   the failure mode for both is plausible-sounding records nobody can verify.
+5. **Confluence flow (planned direction, not yet designed in detail):** curate
    truth in the local git KG → generate structured pages (one per entity,
    consistent template) → publish into a dedicated Confluence space (user has
    control over creating this) → Rovo indexes that clean space for grounding.

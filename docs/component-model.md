@@ -46,6 +46,18 @@ claude-code-access ┘
 - Shared behaviour that two integrations need belongs in `kg-core`, or it is not
   shared behaviour.
 
+### The `meta/` tier
+
+`meta/` holds components that observe the *process* of building this project rather
+than participating in it — see [`../meta/README.md`](../meta/README.md). It sits
+outside the dependency graph above, with one hard rule:
+
+**Nothing under `components/` may depend on anything under `meta/`.**
+
+Meta components observe and are never observed. A dependency from a component to a
+meta component would tie that component to this project's history and quietly make
+it non-extractable — destroying the property this whole model exists to protect.
+
 ## Contracts
 
 Each component owns a `README.md` stating its purpose, its boundary, what it
