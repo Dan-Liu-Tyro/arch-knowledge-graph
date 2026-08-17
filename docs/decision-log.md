@@ -66,26 +66,42 @@ plain RAG.
   deployment path (TAP/CTAP via Schooner/Jetstream, GitOps/ArgoCD, promoted
   dev → staging → production via Drydock) — not just running locally. Treated
   as a v2 concern; doesn't block starting the KG core now.
-- **Claude → Confluence access:** an Atlassian MCP connector
-  (`mcp.atlassian.com`) is already installed in this Claude Code session but
-  not yet authenticated (OAuth pending). Once authenticated it should expose
-  Confluence (and possibly Jira) read/write tools directly to Claude Code.
-  Unconfirmed until authenticated: whether it also exposes a way to invoke/
-  direct the Rovo agent itself, or only raw Confluence/Jira CRUD.
+- **Claude → Confluence access:** the Atlassian MCP connector is installed and
+  authenticated in Claude Code. Verified against the live tool list: it exposes
+  Confluence page read/create/update and CQL search, Jira issue read/write/
+  transition and JQL search, Compass components, and Teamwork Graph context/
+  search. It does **not** expose any way to invoke or direct the Rovo agent
+  itself — CRUD and search only. Two consequences:
+  - The git → Confluence publish step can be driven directly from Claude Code
+    (`createConfluencePage` / `updateConfluencePage`), so getting started needs
+    no separately deployed integration.
+  - Grounding Rovo still depends on Rovo indexing the published Confluence
+    space. There is no MCP shortcut, which reinforces treating the
+    network-reachable query interface as a v2 concern.
 
 ## Open questions (not yet decided)
 
 - Concrete schema: entity types, relationship types, folder layout, frontmatter
   shape.
 - Confluence publish/sync mechanism (git → Confluence): generation approach,
-  cadence, conflict handling.
-- Exact capability of the Atlassian MCP connector once authenticated (Confluence
-  CRUD vs. Rovo agent invocation).
-- Repo location/name and whether/when to `git init` this workspace.
+  cadence, conflict handling. The transport is settled (Atlassian MCP page
+  create/update); what remains open is how pages are generated from KG entities
+  and how divergence is handled if someone edits a published page by hand.
+
+Resolved since first draft:
+- Atlassian MCP connector capability — answered under Constraints above
+  (Confluence/Jira CRUD and search, no Rovo agent invocation).
+- Repo location/name and whether to `git init` — done. This workspace is the
+  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default
+  branch and changes landing via reviewed PRs per org change-management
+  standards.
 
 ## Next steps
 
-1. Authenticate the Atlassian MCP connector and inspect what tools it actually
-   exposes.
-2. Define the KG schema (entity types, relation types, frontmatter shape).
-3. Design the Confluence publish/sync mechanism.
+1. Define the KG schema (entity types, relation types, frontmatter shape). This
+   is now the critical path — nothing downstream can be built against it until
+   it exists.
+2. Design the Confluence publish/sync mechanism (page generation from entities,
+   cadence, handling of hand-edited pages).
+3. Sample a representative slice of the 100+ existing Confluence pages to
+   pressure-test the draft schema against real content before committing to it.
