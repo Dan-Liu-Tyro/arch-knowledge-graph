@@ -1,87 +1,117 @@
 # token-tracking
 
-Granular token consumption data for this project, so the cost of different kinds of
-task can be reasoned about from evidence rather than intuition.
+Granular token consumption and cost data for this project, so strategy can be
+adjusted from evidence rather than intuition.
+
+## Answering the allowance question honestly
+
+**Claude Code does not expose your plan allowance locally.** Transcripts were
+checked for quota, limit, and allowance fields; the only matches were incidental
+prompt text. There is no local number to compare daily spend against.
+
+Two things follow. First, `--allowance` takes a figure *you* supply — read your
+limit from `/usage` in Claude Code and pass it in, and the tool reports spend as a
+percentage of it. Second, `--by window` buckets by rolling five-hour periods,
+which is how Claude Code actually enforces usage limits, so it is the grouping
+that corresponds to allowance consumption rather than to calendar days.
+
+```
+python3 meta/token-tracking/summarize.py --by window --allowance 15
+```
 
 ## Data source
 
 Claude Code writes a JSONL transcript per session to
 `~/.claude/projects/<slugified-project-path>/*.jsonl`. Each assistant message
-carries a `usage` object with real figures:
+carries `usage` with four token categories:
 
-```
-input_tokens                  uncached prompt tokens
-cache_creation_input_tokens   tokens written into the prompt cache
-cache_read_input_tokens       tokens served from the prompt cache
-output_tokens                 generated tokens
-```
+| Field | Meaning |
+|---|---|
+| `input_tokens` | uncached prompt tokens, full price |
+| `cache_creation_input_tokens` | tokens written to cache — costs *more* than base input |
+| `cache_read_input_tokens` | tokens served from cache — roughly a tenth of base input |
+| `output_tokens` | generated tokens, the most expensive category per token |
 
-Plus `model`, so Opus and Sonnet usage can be separated — they differ enough in
-price that mixing them makes totals meaningless.
-
-The transcripts live outside the repo, under the user's home directory. That is
-deliberate and should stay that way: they contain full conversation content.
-
-## What gets committed
-
-**Aggregates only. Never transcript content.**
-
-Committing conversation text would put arbitrary discussion into git, and this repo
-is destined to publish generated pages to Confluence. Only derived metrics belong
-here: token counts, model split, per-session and per-period rollups, and labels for
-what the work was.
-
-[`summarize.py`](summarize.py) reads local transcripts and prints aggregates. It
-reads only `usage` and `model` fields, never message content, so its output is safe
-to commit by construction rather than by care.
+Records also carry `model`, `gitBranch`, `effort`, and `isSidechain` — the
+attribution keys that make per-task costing possible without manual bookkeeping.
 
 ## Usage
 
 ```
-python3 meta/token-tracking/summarize.py              # per-session summary
-python3 meta/token-tracking/summarize.py --by-day     # daily rollup
-python3 meta/token-tracking/summarize.py --json       # machine-readable
+--by session   per session (default)
+--by day       calendar days
+--by window    rolling 5-hour buckets — matches how usage limits are enforced
+--by branch    per git branch — the closest thing to per-feature attribution
+--by effort    per reasoning-effort level
+--by model     per model, since prices differ several-fold
+
+--allowance N  show each bucket as a percentage of a budget you supply
+--cache-ttl    1h (default, what Claude Code uses) or 5m — changes write cost
+--json         machine-readable
 ```
 
-No dependencies, standard library only. This is currently the repo's only
-executable file.
+No dependencies, standard library only. This is the repo's only executable file.
+
+## Cost model
+
+List prices per million tokens, from the Claude API reference:
+
+| Model | Input | Output |
+|---|---|---|
+| Opus 5 | $5.00 | $25.00 |
+| Sonnet 5 | $3.00 | $15.00 |
+| Haiku 4.5 | $1.00 | $5.00 |
+
+Cache writes bill at a multiple of base input — **2× on a 1-hour TTL**, 1.25× on
+5-minute. Claude Code uses the 1-hour TTL, so that is the default. Cache reads
+bill at roughly 0.1× base input.
+
+Three limits worth stating plainly:
+
+- **This is a list-price estimate, not billed spend.** Subscription plans do not
+  bill per token, so treat the figure as relative cost for comparing tasks, not as
+  an invoice.
+- **Sonnet 5 has an introductory rate** of $2.00/$10.00 through 2026-08-31. The
+  table uses standard pricing, so Sonnet lines read high for now.
+- **Unpriced models count as zero.** Synthetic entries and any model absent from
+  the table contribute nothing; the tool says so in a footer rather than silently
+  under-reporting.
 
 ## Reading the numbers
 
-Two traps worth stating up front, because both make naive totals misleading.
-
-**Cache reads dominate and are not full price.** In the first sessions,
+**Cache reads dominate volume and are the cheapest category.** In the baseline,
 `cache_read_input_tokens` exceeded raw `input_tokens` by roughly four orders of
-magnitude (13.8M against 519). Summing all token types into one number would be
-dominated by the cheapest category and tell you almost nothing. Cache reads are
-billed at a fraction of base input rate, so any cost estimate has to weight
-categories separately.
+magnitude. Summing token categories unweighted therefore measures almost nothing
+but cache-read volume — which is why this tool reports categories separately and
+prices them separately.
 
-**Long sessions inflate cache reads superlinearly.** Every turn re-reads the
-accumulated context, so cache-read totals grow with conversation length regardless
-of how much work the turn did. This means cache reads measure *session length*, not
-task difficulty. For comparing task cost, `output_tokens` and
-`cache_creation_input_tokens` are the more honest signals.
+**Cache reads measure session length, not task difficulty.** Every turn re-reads
+the accumulated context, so the total grows with conversation length regardless of
+how much work the turn did. **To compare the cost of two tasks, compare
+`output_tokens` and `cache_creation_input_tokens`.**
 
-## Correlating tokens to work
+**Model mix matters more than token totals.** Opus and Sonnet differ several-fold
+in price, so a bucket's cost depends on which model served it. Every grouping
+reports its model split for that reason.
 
-The open problem. Transcripts have timestamps; commits have timestamps. Matching
-them gives a rough per-task attribution without any manual bookkeeping, which is
-attractive but approximate — sessions interleave discussion and implementation, and
-plenty of expensive turns produce no commit at all.
+## Attribution: solved well enough by `gitBranch`
 
-Options, none chosen yet:
+The original open question — how to attribute tokens to tasks — turned out to
+have a good answer already in the data. Records carry the git branch they were
+produced on, so `--by branch` gives per-feature cost with no bookkeeping, provided
+work is branched by feature (which this repo does anyway).
 
-- **Timestamp correlation against git history.** Zero effort, roughly right, and
-  wrong in ways that are hard to detect.
-- **Explicit task labels** recorded per session. Accurate, requires discipline, and
-  discipline is what decays first.
-- **Per-turn tagging** from within sessions. Most granular, most intrusive.
+`--by effort` and the `sidechain_messages` count in JSON output add two more
+dimensions: reasoning level, and how much spend went to subagents rather than the
+main thread.
 
-Deliberately unresolved. Collecting clean data now is worth more than picking an
-attribution scheme before knowing which questions matter.
+What remains genuinely unsolved is attribution *within* a long-lived branch — the
+`plan` branch covers schema, components, and meta work, and nothing in the data
+separates them. Timestamp correlation against commits would approximate it, and is
+deliberately not implemented: the branch-level signal is honest, and a finer one
+built on guesswork would be worse than none.
 
 ## Status
 
-Extraction works and a baseline is recorded in [`baseline.md`](baseline.md).
-Attribution to tasks is not built.
+Working. Regenerate the baseline with `--by day` and `--by branch` after any
+significant stretch of work.

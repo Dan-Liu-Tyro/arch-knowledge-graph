@@ -37,7 +37,13 @@ repo's only executable file.
 Entries in `meta/architecture-learning/` require cited evidence and are marked
 `stated` or `inferred` with a confidence level. Do not add an entry you cannot
 point to a specific interaction for; an uncitable entry is a projection and reads
-as authoritative anyway.
+as authoritative anyway. Prefer recording *how* a decision was reached, and which
+counter-arguments were accepted, over recording conclusions — a profile that only
+reproduces conclusions cannot push back, and pushback is wanted.
+
+`meta/token-tracking/summarize.py --by branch` gives per-feature cost. Compare
+tasks on `output` and `cache_wr`, never on cache reads — those scale with
+conversation length, not with work done.
 
 Each component's `README.md` states its purpose, boundary, dependencies, and
 extraction notes, and is treated as its contract — if a change makes a README

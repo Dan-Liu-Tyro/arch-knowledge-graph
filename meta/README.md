@@ -10,8 +10,8 @@ ship with it.
 
 | Meta component | Purpose |
 |---|---|
-| [`architecture-learning`](architecture-learning) | An evidence-based record of the architectural style demonstrated across this project, so it can be applied consistently in later work. |
-| [`token-tracking`](token-tracking) | Granular token consumption data, so the cost of different kinds of task and reasoning can be reasoned about with evidence. |
+| [`architecture-learning`](architecture-learning) | A cumulative "digital architect" — an evidence-based model of how this architect reasons, exportable to session memory, `CLAUDE.md`, or the architecture agent this project is building. |
+| [`token-tracking`](token-tracking) | Token consumption and cost by day, five-hour window, branch, effort, and model, so strategy can be adjusted from evidence. |
 
 ## The one hard rule
 

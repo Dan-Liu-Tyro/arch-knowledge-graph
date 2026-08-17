@@ -70,6 +70,19 @@ plain RAG.
    extractable component to this project's history. Both meta components are built
    around evidence and provenance — cited observations, derived metrics — because
    the failure mode for both is plausible-sounding records nobody can verify.
+   - `architecture-learning`'s goal is a **"digital architect"** that grows more
+     aligned with use, consumer-agnostic so the consumer can be chosen later
+     (session memory, `CLAUDE.md`, or the architecture agent this project is
+     building). Export is one-way — curate here, copy outward — so there is one
+     reviewable source. It records *how* decisions get made and which
+     counter-arguments were accepted, not only conclusions, because a profile
+     optimised for agreement cannot challenge its subject, and being challenged is
+     an explicit requirement.
+   - `token-tracking` reports cost by day, rolling five-hour window (matching how
+     usage limits are enforced), git branch, effort level, and model. Plan
+     allowance is **not** available locally — verified against the transcripts — so
+     the budget figure has to be supplied by the user. Attribution to features is
+     solved by the `gitBranch` field already present in the data.
 5. **Confluence flow (planned direction, not yet designed in detail):** curate
    truth in the local git KG → generate structured pages (one per entity,
    consistent template) → publish into a dedicated Confluence space (user has

@@ -1,64 +1,84 @@
 # architecture-learning
 
-A cumulative, evidence-based record of the architectural style demonstrated across
-this project, so that later work can apply the same reasoning instead of
-re-deriving it — or worse, guessing at it.
+An accumulating, evidence-based model of how one architect thinks — built from
+working on this project — so that later work can apply the same reasoning
+deliberately instead of re-deriving or guessing at it.
 
-The content lives in [`style-profile.md`](style-profile.md).
+The goal is a **"digital architect"**: a profile that gets more aligned the more it
+is used, and that is useful to more than one consumer. The content lives in
+[`style-profile.md`](style-profile.md).
 
-## What this is for
+## Consumers
 
-Over a long project, preferences reveal themselves through decisions: what gets
-rejected, what gets asked about, what gets corrected. Left implicit, that knowledge
-has to be rebuilt every session and tends to be approximated badly. Written down
-with evidence, it can be applied deliberately and — importantly — argued with.
+The profile is written to be consumer-agnostic, because which consumers matter is
+not yet decided. Candidates, in rough order of near-term value:
+
+| Consumer | What it would take | Notes |
+|---|---|---|
+| Claude Code session memory | Distil an entry into a durable, one-topic memory | Fastest path to effect. Memory has a high bar — it must be a standing preference, not context — so only some entries qualify. |
+| `CLAUDE.md` | Copy the relevant principle into project instructions | Scoped to this repo, but immediate and reviewable. |
+| The architecture agent built in this project | Load the profile as grounding alongside the KG | The most interesting target: the agent reviews design docs, so knowing *how this architect reasons* is directly applicable. |
+| Prompt or agent config elsewhere | Export the distilled principles as a text block | Portable, and the reason entries are written to stand alone. |
+
+**The export direction is one-way, and deliberately so.** Entries are curated here
+and copied outward; nothing writes back. That keeps a single reviewable source and
+avoids two representations drifting.
+
+**Do not merge this into `kg-content`.** That holds Tyro's canonical architecture
+knowledge and gets published to Confluence for other people to rely on. This holds
+one person's style. Merging them would quietly promote personal preference to
+organisational canon.
 
 ## How entries are written
 
 Every entry carries:
 
-- **Statement** — the preference or pattern, phrased so it can guide a decision.
-- **Evidence** — the specific interaction, decision, or commit that demonstrated
-  it. Not a vague gesture at "past conversations".
+- **Statement** — the position, phrased so it can guide a decision.
+- **Evidence** — the specific interaction, decision, or commit that demonstrated it.
 - **Type** — `stated` (said outright) or `inferred` (observed from choices).
 - **Confidence** — `strong`, `moderate`, or `tentative`.
+- **Implication** — what to do differently, where that isn't obvious.
 
-Nothing goes in without evidence. An entry that cannot cite where it came from is
-either a guess or a projection, and both are worse than an absent entry because
-they look equally authoritative.
+Nothing goes in without evidence. An entry that cannot cite its origin is a guess
+or a projection, and both read as authoritative anyway.
 
-`inferred` entries are the risky ones. A single instance is a coincidence; a
-pattern needs repetition before it earns `strong`. When an inference turns out
-wrong, the entry is corrected in place with a note — the mistake is itself
-evidence about where the model of your style was wrong.
+`inferred` entries are the risky ones. One instance is a coincidence; a pattern
+needs repetition before it earns `strong`. When an inference turns out wrong, correct
+it in place with a note — the mistake is itself evidence about where the model of
+this architect was wrong.
 
-## Relationship to Claude Code's session memory
+## The tension worth naming
 
-Claude Code keeps its own memory outside this repo. That memory is tooling-side:
-not reviewable in a diff, not versioned with the project, and shaped around
-operating instructions ("commit without asking", "prefer org-aligned config").
+**An aligned model cannot challenge you, and being challenged is the stated
+requirement.** A profile optimised purely for agreement produces exactly the
+agreeable assistant this project's owner asked me not to be. Two consequences for
+how the profile is built:
 
-This component is different in kind. It is *in* the repo, reviewable in a PR, and
-about architectural reasoning rather than workflow mechanics. The practical
-consequence is that you can correct it the same way you would correct any other
-curated knowledge here — by editing the file and reviewing the diff.
+- Record **how decisions get made** — what evidence is demanded, what tradeoffs are
+  weighed, where the bar sits — rather than only the conclusions reached. Reasoning
+  transfers to new problems; conclusions do not.
+- Record **changes of mind and accepted counter-arguments** explicitly. Those are
+  the highest-value entries, because they show which arguments land and mark the
+  positions that are genuinely open rather than settled.
 
-Some overlap is fine. Duplication is cheaper than a shared abstraction between a
-repo artifact and an external tool's state.
+A digital architect that reproduces your conclusions is a cache. One that
+reproduces your *reasoning* can disagree with you using your own standards — which
+is the thing actually worth building.
 
-## Possible dogfooding
+## Architecture versus workflow
 
-The entries here are structurally close to `principle` entities in the KG schema:
-a statement, a rationale, and implications. Modelling them with the real schema
-would pressure-test it against genuine content at zero risk, which is more useful
-than inventing test fixtures.
+`style-profile.md` separates **architectural positions** from **working
+preferences**, because they have different consumers and different shelf lives.
+Architectural positions are the substance and should grow fastest; working
+preferences are real but mostly belong in session memory rather than in an agent's
+grounding.
 
-Worth keeping the two graphs strictly separate, though. This one holds *one
-person's* style; `kg-content` holds Tyro's canonical architecture knowledge, and
-that one gets published to Confluence for others to rely on. Merging them would
-quietly promote personal preference to org canon.
+The initial seeding was workflow-heavy, which reflects that the early sessions were
+about process — git, tooling, repo structure — rather than architecture. That is a
+sampling artefact, not a finding about what this architect cares about. Later
+sessions doing schema and design work should shift the balance.
 
 ## Status
 
-Seeded from the first working sessions. Deliberately short — a handful of
-well-evidenced entries beats a long list of plausible guesses.
+Seeded from the first sessions. Deliberately short — a handful of well-evidenced
+entries beats a long list of plausible guesses. Consumers not yet wired up.
