@@ -87,6 +87,15 @@ plain RAG.
   cadence, conflict handling. The transport is settled (Atlassian MCP page
   create/update); what remains open is how pages are generated from KG entities
   and how divergence is handled if someone edits a published page by hand.
+- **GitHub connector availability — parked, revisit later.** No GitHub MCP
+  connector is enabled in the current Claude Code session (verified against the
+  live tool list). Not yet established whether that is an org-level entitlement
+  decision, an account-level one, or simply not added to this project's MCP
+  config. Not blocking: org standards direct GitHub operations through the `gh`
+  CLI, and git over HTTPS already works for branch/commit/push. Worth resolving
+  eventually because PR review is the KG's designated quality gate, so smoother
+  PR tooling has compounding value once schema work starts producing reviewable
+  changes.
 
 Resolved since first draft:
 - Atlassian MCP connector capability — answered under Constraints above
