@@ -78,6 +78,15 @@ plain RAG.
      counter-arguments were accepted, not only conclusions, because a profile
      optimised for agreement cannot challenge its subject, and being challenged is
      an explicit requirement.
+   - `procedural-memory` holds operational lessons — mistakes made here and the
+     rules that prevent them — and is separate from `architecture-learning` because
+     the two differ in subject and urgency: the former records the agent's own
+     errors and must take effect immediately, the latter models the user's reasoning
+     and has no consumer yet. The load-bearing part is the pointer from `CLAUDE.md`,
+     since a repo file changes nothing by existing; rules whose violation is
+     expensive are stated inline in `CLAUDE.md` rather than only in the component.
+     `architecture-learning` is explicitly deprioritised behind the
+     challenging-thinking-partner behaviour.
    - `token-tracking` reports cost by day, rolling five-hour window (matching how
      usage limits are enforced), git branch, effort level, and model. Plan
      allowance is **not** available locally — verified against the transcripts — so

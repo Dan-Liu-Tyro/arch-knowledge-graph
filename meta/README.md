@@ -10,8 +10,14 @@ ship with it.
 
 | Meta component | Purpose |
 |---|---|
-| [`architecture-learning`](architecture-learning) | A cumulative "digital architect" — an evidence-based model of how this architect reasons, exportable to session memory, `CLAUDE.md`, or the architecture agent this project is building. |
+| [`procedural-memory`](procedural-memory) | Operational lessons — mistakes made here and the rules that prevent repeating them. Intended to change behaviour immediately, via a pointer from `CLAUDE.md`. |
+| [`architecture-learning`](architecture-learning) | A slow-curated model of how this architect reasons. Deprioritised: no consumer wired up, revisited later. |
 | [`token-tracking`](token-tracking) | Token consumption and cost by day, five-hour window, branch, effort, and model, so strategy can be adjusted from evidence. |
+
+The first two are deliberately separate. `procedural-memory` is about **my** errors
+and takes effect now; `architecture-learning` models **the user's** reasoning and is
+curation without a consumer. Different subject, different urgency, and keeping them
+apart stops the urgent one from being buried in the speculative one.
 
 ## The one hard rule
 

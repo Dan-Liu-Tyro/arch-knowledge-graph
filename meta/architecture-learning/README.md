@@ -80,5 +80,15 @@ sessions doing schema and design work should shift the balance.
 
 ## Status
 
+**Deprioritised, deliberately.** The user has ranked the challenging-thinking-partner
+behaviour above building this profile out, to be revisited later and only to the
+extent that some of its content is worth merging into how the collaboration actually
+works. So this is slow curation: add well-evidenced entries when a session produces
+one, and do not spend a turn on it for its own sake.
+
+Operational lessons that need to change behaviour *now* go to
+[`../procedural-memory`](../procedural-memory) instead — that component exists
+precisely because this one has no consumer yet.
+
 Seeded from the first sessions. Deliberately short — a handful of well-evidenced
-entries beats a long list of plausible guesses. Consumers not yet wired up.
+entries beats a long list of plausible guesses.

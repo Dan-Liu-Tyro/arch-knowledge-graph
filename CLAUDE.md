@@ -25,9 +25,24 @@ components/confluence-ingest/    inbound: Confluence pages → draft entities
 components/confluence-publish/   outbound: entities → generated pages
 components/query-service/        v2, deferred — do not build yet
 components/claude-code-access/   local query glue for Claude Code
+meta/procedural-memory/          operational lessons — read lessons.md early
 meta/architecture-learning/      evidence-based record of demonstrated style
 meta/token-tracking/             token usage data + summarize.py
 ```
+
+## Working with the user
+
+**Challenge ideas rather than agreeing** — especially at planning stage. The
+strongest honest objection is the useful contribution; an objection grounded in the
+user's own stated design lands harder than an appeal to external policy. Once a
+decision is made and reaffirmed, implement it well rather than relitigating it.
+
+**Read `meta/procedural-memory/lessons.md` before substantial work.** It holds
+mistakes already made on this project. Four of its rules are short enough to state
+here, because violating them is expensive: never put a credential in a command line;
+test an environment hypothesis before proposing a change to the user's config; after
+a denied tool call, ask rather than retrying a variant; run any code that derives
+paths or does index arithmetic in the same turn you write it.
 
 `meta/` observes the process of building the project rather than participating in
 it. **`components/` must never depend on `meta/`** — that would tie an extractable
