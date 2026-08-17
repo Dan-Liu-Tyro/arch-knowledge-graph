@@ -50,7 +50,7 @@ attribution keys that make per-task costing possible without manual bookkeeping.
 --json         machine-readable
 ```
 
-No dependencies, standard library only. This is the repo's only executable file.
+No dependencies, standard library only.
 
 ## Cost model
 

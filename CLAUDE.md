@@ -46,15 +46,19 @@ paths or does index arithmetic in the same turn you write it.
 
 `meta/` observes the process of building the project rather than participating in
 it. **`components/` must never depend on `meta/`** — that would tie an extractable
-component to this project's history. `meta/token-tracking/summarize.py` is the
-repo's only executable file.
+component to this project's history. The repo's only executables live here —
+`token-tracking/summarize.py` and `architecture-learning/reindex.py`, both stdlib
+only.
 
-Entries in `meta/architecture-learning/` require cited evidence and are marked
-`stated` or `inferred` with a confidence level. Do not add an entry you cannot
-point to a specific interaction for; an uncitable entry is a projection and reads
-as authoritative anyway. Prefer recording *how* a decision was reached, and which
-counter-arguments were accepted, over recording conclusions — a profile that only
-reproduces conclusions cannot push back, and pushback is wanted.
+`meta/architecture-learning/` is two layers: append a line to `observations.md`
+during a conversation (no read needed), and promote to `principles/<slug>.md` only
+when a pattern repeats. Read `INDEX.md` — not the principle files — to decide
+whether something is new; it is generated, so run `reindex.py` after any frontmatter
+change. Every entry needs cited evidence and a `stated`/`inferred` marker; an
+uncitable entry is a projection and reads as authoritative anyway. Prefer recording
+*how* a decision was reached, and which counter-arguments were accepted, over
+recording conclusions — a profile that only reproduces conclusions cannot push back,
+and pushback is wanted.
 
 `meta/token-tracking/summarize.py --by branch` gives per-feature cost. Compare
 tasks on `output` and `cache_wr`, never on cache reads — those scale with

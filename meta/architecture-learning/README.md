@@ -1,94 +1,115 @@
 # architecture-learning
 
-An accumulating, evidence-based model of how one architect thinks — built from
-working on this project — so that later work can apply the same reasoning
-deliberately instead of re-deriving or guessing at it.
+An accumulating, evidence-based model of how one architect reasons — built from
+working on this project.
 
-The goal is a **"digital architect"**: a profile that gets more aligned the more it
-is used, and that is useful to more than one consumer. The content lives in
-[`style-profile.md`](style-profile.md).
+**Deprioritised on the consumption side**, by explicit instruction: no consumer is
+wired up, and it should not absorb a turn for its own sake. But recording continues
+as conversations happen, because the evidence is only capturable while it is fresh.
 
-## Consumers
+## Structure
 
-The profile is written to be consumer-agnostic, because which consumers matter is
-not yet decided. Candidates, in rough order of near-term value:
+```
+INDEX.md          generated routing table — the only file read on a normal session
+observations.md   append-only raw capture, one line per observation
+principles/       one file per principle, carrying its own evidence
+reindex.py        regenerates INDEX.md from principle frontmatter
+```
 
-| Consumer | What it would take | Notes |
+## Why split, and why not for the reason you might expect
+
+The single-file version cost ~2,200 tokens to read, which is nothing. Projected to
+100 entries it would be ~22,000 — real, but a future problem. **Token cost is not
+the strongest argument for splitting today.** Two structural facts are:
+
+**Evidence accumulates far faster than principles do.** After many sessions there
+may be a hundred observations behind a dozen principles. A flat file mixes the
+high-volume, low-judgement stream with the low-volume, high-judgement conclusions,
+so both get harder to work with: capture feels heavyweight, and the principles get
+buried in their own supporting material.
+
+**Capture and curation want different costs.** Capturing should be nearly free, or it
+won't happen mid-conversation and the evidence is lost. Promotion should be
+deliberate, because a principle asserted from one weak instance is exactly the
+projection this component exists to avoid. One file forces both through the same
+gate; two layers let each have its own.
+
+The token saving is real and follows from getting that structure right — it is the
+consequence, not the motive.
+
+## The access pattern this is designed around
+
+Every session asks one question: *the user just did or said X — is that new evidence
+for an existing principle, a new principle, or not durable?*
+
+Answering it needs the **statements** of existing principles and none of their
+evidence. So:
+
+| Operation | Reads | Cost today |
 |---|---|---|
-| Claude Code session memory | Distil an entry into a durable, one-topic memory | Fastest path to effect. Memory has a high bar — it must be a standing preference, not context — so only some entries qualify. |
-| `CLAUDE.md` | Copy the relevant principle into project instructions | Scoped to this repo, but immediate and reviewable. |
-| The architecture agent built in this project | Load the profile as grounding alongside the KG | The most interesting target: the agent reviews design docs, so knowing *how this architect reasons* is directly applicable. |
-| Prompt or agent config elsewhere | Export the distilled principles as a text block | Portable, and the reason entries are written to stand alone. |
+| Capture an observation | nothing — shell append | ~0 |
+| Decide new vs. existing | `INDEX.md` only | ~550 tokens |
+| Add evidence to a principle | one principle file | ~250 tokens |
+| Promote an observation | `INDEX.md` + write one file | ~700 tokens |
+| Export everything to a consumer | all principle files | ~2,200 tokens, and only when exporting |
 
-**The export direction is one-way, and deliberately so.** Entries are curated here
-and copied outward; nothing writes back. That keeps a single reviewable source and
-avoids two representations drifting.
+Compare the flat file, where every one of those cost a full read. The index is 4×
+cheaper than the old file *already*, at only ten principles.
 
-**Do not merge this into `kg-content`.** That holds Tyro's canonical architecture
-knowledge and gets published to Confluence for other people to rely on. This holds
-one person's style. Merging them would quietly promote personal preference to
-organisational canon.
+## Working practice
 
-## How entries are written
+1. **During a conversation**, append to `observations.md`. One line, no ceremony.
+   Do not stop to decide whether it matters.
+2. **When an observation looks like a pattern**, read `INDEX.md`. If it belongs to an
+   existing principle, open that one file, add the evidence line, and bump
+   `evidence` in its frontmatter. If it is genuinely new, write a new principle file.
+3. **Run `python3 meta/architecture-learning/reindex.py`** after any frontmatter or
+   heading change. The index is generated so it cannot drift; a stale routing table
+   would be worse than none.
+4. **Mark the observation** with the principle id it fed, or leave it `unpromoted`.
+   Unpromoted entries are the honest default.
 
-Every entry carries:
+## Frontmatter
 
-- **Statement** — the position, phrased so it can guide a decision.
-- **Evidence** — the specific interaction, decision, or commit that demonstrated it.
-- **Type** — `stated` (said outright) or `inferred` (observed from choices).
-- **Confidence** — `strong`, `moderate`, or `tentative`.
-- **Implication** — what to do differently, where that isn't obvious.
+```yaml
+---
+id: curation-over-accumulation   # matches filename stem
+kind: architectural | working    # architectural is the substance; working is process
+type: stated | inferred          # said outright, or observed from choices
+confidence: strong | moderate | tentative
+evidence: 2                      # count of evidence items in the file
+updated: 2026-08-17
+---
+```
 
-Nothing goes in without evidence. An entry that cannot cite its origin is a guess
-or a projection, and both read as authoritative anyway.
+`reindex.py` fails loudly on a missing field rather than emitting a partial index.
 
-`inferred` entries are the risky ones. One instance is a coincidence; a pattern
-needs repetition before it earns `strong`. When an inference turns out wrong, correct
-it in place with a note — the mistake is itself evidence about where the model of
-this architect was wrong.
+Deliberately **not** the KG schema from `components/kg-core/SCHEMA.md`, even though
+the shapes are close. Using it here would be a cheap way to pressure-test that schema
+against real content without touching org material — worth doing, but as a decision
+taken on purpose, not by drifting the two formats together.
 
-## The tension worth naming
+## Two things this must not become
 
-**An aligned model cannot challenge you, and being challenged is the stated
-requirement.** A profile optimised purely for agreement produces exactly the
-agreeable assistant this project's owner asked me not to be. Two consequences for
-how the profile is built:
+**Do not merge into `kg-content`.** That holds Tyro's canonical architecture
+knowledge and publishes to Confluence for others to rely on. This holds one person's
+style. Merging would promote personal preference to organisational canon.
 
-- Record **how decisions get made** — what evidence is demanded, what tradeoffs are
-  weighed, where the bar sits — rather than only the conclusions reached. Reasoning
-  transfers to new problems; conclusions do not.
-- Record **changes of mind and accepted counter-arguments** explicitly. Those are
-  the highest-value entries, because they show which arguments land and mark the
-  positions that are genuinely open rather than settled.
+**Do not optimise for agreement.** A profile that only reproduces conclusions is a
+cache, and a perfectly aligned model cannot challenge its subject — which is the
+explicit requirement here. So principle files record *how* a decision was reached,
+and `## Contested history` sections record positions that were argued and changed.
+Those sections are the highest-value content, because they show which arguments land.
 
-A digital architect that reproduces your conclusions is a cache. One that
-reproduces your *reasoning* can disagree with you using your own standards — which
-is the thing actually worth building.
+## Evolution is git, not a changelog
 
-## Architecture versus workflow
+No entry tracks its own revision history. `git log --follow principles/<file>` is
+that history, with authorship and diffs, and it is free. `updated` in frontmatter
+exists only so the index can be sorted and scanned, not as a substitute.
 
-`style-profile.md` separates **architectural positions** from **working
-preferences**, because they have different consumers and different shelf lives.
-Architectural positions are the substance and should grow fastest; working
-preferences are real but mostly belong in session memory rather than in an agent's
-grounding.
+## Division from the other meta components
 
-The initial seeding was workflow-heavy, which reflects that the early sessions were
-about process — git, tooling, repo structure — rather than architecture. That is a
-sampling artefact, not a finding about what this architect cares about. Later
-sessions doing schema and design work should shift the balance.
-
-## Status
-
-**Deprioritised, deliberately.** The user has ranked the challenging-thinking-partner
-behaviour above building this profile out, to be revisited later and only to the
-extent that some of its content is worth merging into how the collaboration actually
-works. So this is slow curation: add well-evidenced entries when a session produces
-one, and do not spend a turn on it for its own sake.
-
-Operational lessons that need to change behaviour *now* go to
-[`../procedural-memory`](../procedural-memory) instead — that component exists
-precisely because this one has no consumer yet.
-
-Seeded from the first sessions. Deliberately short — a handful of well-evidenced
-entries beats a long list of plausible guesses.
+`procedural-memory` records **my** operational mistakes and takes effect immediately
+via a `CLAUDE.md` pointer. This component models **the user's** reasoning and has no
+consumer yet. Session memory holds only what the user stated or corrected directly.
+Same lesson never lives in two of the three.
