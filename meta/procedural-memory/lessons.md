@@ -131,3 +131,24 @@ fades.
 `observations.md` append as part of finishing that turn — the same way a decision
 gets written to `decision-log.md` in the turn it's made — not a step that waits for
 a reminder.
+
+---
+
+## Two documents can number "decisions" differently — check before citing by number
+
+**What happened.** An earlier session cited "decision 3" to mean the
+Confluence-as-output decision. That number came from `CLAUDE.md`'s informal
+four-item summary, not from `docs/decision-log.md`'s actual numbered list, where
+the same decision is **5** (decision 3 there is the components-not-one-application
+one). I copied "decision 3" into two freshly-written files this session, right
+after having read the existing "cite by name, never by number" rule — the general
+rule was in view and I still applied a number from the wrong document.
+
+**Cost.** Two files committed with a wrong cross-reference, caught only because
+the user asked what "decision 3" actually was.
+
+**Rule.** When a decision appears in both `CLAUDE.md`'s prose summary and
+`decision-log.md`'s numbered list, the two numbers are not guaranteed to match —
+they're independently maintained. Quote the decision's name, not a number, from
+either document. If a number is unavoidable, verify it against
+`docs/decision-log.md` specifically, since that is the canonical numbered list.

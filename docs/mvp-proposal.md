@@ -56,10 +56,10 @@ two days apart, landed on the same problem.
 
 ## The one real tension requiring a decision
 
-Decision 3 ("Confluence is an output, not the source of truth") and ChatGPT's
+The Confluence-flow decision (decision 5, "Confluence is an output, not the source of truth") and ChatGPT's
 two-layer framing sound similar but aren't:
 
-- **Decision 3, taken literally:** curate in git → generate a full narrative page
+- **Decision 5, taken literally:** curate in git → generate a full narrative page
   per entity → publish → eventually stop hand-editing Confluence for canonical
   topics. This means eventually out-writing existing narrative content.
 - **ChatGPT's framing:** existing Confluence pages stay exactly as they are
@@ -68,7 +68,7 @@ two-layer framing sound similar but aren't:
 
 **Recommendation made at the time:** adopt the second framing for the MVP, and
 treat full page-generation as a possible later end-state pending evidence — scope
-decision 3 rather than reverse it.
+decision 5 rather than reverse it.
 
 ## Hard constraint on any experiment
 
@@ -101,6 +101,6 @@ any evaluation tooling.
 ## Status
 
 **Undecided.** Nothing above has been actioned. Waiting on: (a) whether to adopt
-the thin-annotation MVP framing over decision 3's literal reading, (b) the two
+the thin-annotation MVP framing over decision 5's literal reading, (b) the two
 inputs above, (c) confirmation of a genuinely non-production space if the
 Confluence experiment proceeds at all.

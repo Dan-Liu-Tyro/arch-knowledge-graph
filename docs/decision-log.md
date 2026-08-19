@@ -149,7 +149,7 @@ plain RAG.
 
 ## Open questions (not yet decided)
 
-- **Whether to adopt an MVP-first reframing of decision 3 and the schema itself**
+- **Whether to adopt an MVP-first reframing of decision 5 (Confluence flow) and the schema itself**
   — see [`docs/mvp-proposal.md`](mvp-proposal.md), recovered from a lapsed
   session where it was assessed but never decided. Blocks on a real question
   set and known-canonical/superseded Confluence pages, which only a human
