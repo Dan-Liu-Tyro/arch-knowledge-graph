@@ -94,6 +94,15 @@ wrong, update it in the same change.
   its purpose, boundary, or dependencies change. If it isn't in one of those
   files, it didn't happen, as far as the next session (or a teammate) is
   concerned.
+- **Two more background habits, easy to let slide in a long session.** Before
+  treating a substantial turn as finished, check whether anything in it
+  qualifies for `meta/architecture-learning/observations.md` (append, no
+  ceremony — see that component's README) or `meta/procedural-memory/lessons.md`
+  (a mistake worth a rule — see that component's README). Both are described in
+  full elsewhere in this file; this bullet exists because the habit has already
+  been observed to lapse across a whole session without a reminder. Treat a
+  session with no entries in either file as something to ask about, not as
+  quiet evidence that nothing qualified.
 - Keep prose wrapped to ~80 columns to match the existing files.
 - `.idea/` is gitignored (JetBrains); it is present locally but not tracked.
 
