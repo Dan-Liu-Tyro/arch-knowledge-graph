@@ -4,9 +4,9 @@ kind: architectural
 form: hypothesis
 status: reinforced
 type: stated
-support: 3
+support: 4
 contradict: 0
-updated: 2026-08-17
+updated: 2026-08-19
 ---
 
 # Structure for extraction before there is a plan to extract
@@ -22,7 +22,13 @@ operation rather than an untangling exercise — even with no concrete plan to s
   instinct one level up.
 - **Supports.** The earlier decision to decouple KG core from integration so that swapping local
   file reads for a deployed service is "a transport change, not a redesign."
+- **Supports.** Left `architecture-learning`'s consumer undecided by design — "the consumer
+  could later be decided, for example, get key ideas into your memory, claude.md, etc, or it
+  could be used later for architecture agent" — the same decouple-now/choose-later instinct as
+  the core/integration split, applied to a meta component.
 
 ## Status history
 
 - 2026-08-17 · created → reinforced
+- 2026-08-19 · backfilled fourth supporting instance from transcript audit of the 2026-08-17
+  session (architecture-learning consumer left undecided) → still reinforced

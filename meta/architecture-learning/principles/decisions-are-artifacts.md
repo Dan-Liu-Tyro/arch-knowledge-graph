@@ -4,7 +4,7 @@ kind: architectural
 form: preference
 status: reinforced
 type: inferred
-support: 3
+support: 4
 contradict: 0
 updated: 2026-08-19
 ---
@@ -24,8 +24,14 @@ questions visibly open. The reasoning trail is a deliverable, not overhead.
 - **Supports.** Asked directly for a standing rule that project decisions be written into repo
   docs rather than left in Claude's own cross-session memory — "it needs to be remembered at
   project level, not just in your memory."
+- **Supports.** Asked to park GitHub-connector availability as an open decision-log question
+  rather than resolve or drop it — "forget about github connector for now, mark it as a task
+  later to figure out" — recorded with what's actually unknown rather than closed as either
+  resolved or unsupported.
 
 ## Status history
 
 - 2026-08-17 · created → reinforced
 - 2026-08-19 · third supporting instance (repo-not-memory policy request) → reinforced
+- 2026-08-19 · backfilled fourth supporting instance from transcript audit of the 2026-08-17
+  session (GitHub-connector parked as an open question) → still reinforced

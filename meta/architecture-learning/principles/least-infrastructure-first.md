@@ -4,7 +4,7 @@ kind: architectural
 form: hypothesis
 status: reinforced
 type: inferred
-support: 3
+support: 4
 contradict: 0
 updated: 2026-08-19
 ---
@@ -25,6 +25,9 @@ permanently.
   than building it, after being shown that existing docs already cover the project's current
   size, with the revisit trigger named as "scanning docs no longer answers 'where are we'
   quickly."
+- **Supports.** Proposing a long-lived `plan` branch instead of a PR per change, explicitly
+  to avoid per-change review friction during the design phase, with the revisit trigger named
+  up front: "until we reach a milestone."
 
 **Implication.** When proposing infrastructure, lead with what it buys over the
 simpler option and state the condition under which it becomes necessary. A proposal
@@ -34,3 +37,5 @@ without that trigger will be deferred.
 
 - 2026-08-17 · created → reinforced
 - 2026-08-19 · third supporting instance (dashboard deferred to backlog) → reinforced
+- 2026-08-19 · backfilled fourth supporting instance from transcript audit of the 2026-08-17
+  session (long-lived `plan` branch, milestone named as revisit trigger) → still reinforced

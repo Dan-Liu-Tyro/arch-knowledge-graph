@@ -173,6 +173,32 @@ absolute repo path with `/` replaced by `-`; for this repo that directory is
   first built. Check an extract against existing entries before adding — the
   goal is to catch what's missing, not to duplicate what's already there.
 
+**Findings from the first real audit (2026-08-19, three transcripts).**
+- **Line count is a poor proxy for dialogue volume.** One 2.9MB/17,475-line
+  extract had only 35 user turns; the rest was one long single-turn agentic
+  span with no user input in between (visible as a large gap between
+  `grep -n "^--- user ---$"` line numbers). In that case the bulk of it was
+  reference material (Claude API/SDK docs, pulled in while pricing the
+  token-tracking cost model) rather than project dialogue. Grep for the user
+  markers first and read around them; don't read a large extract linearly.
+- **A session's file mtime is not its conversation date, and sessions can run
+  concurrently.** Two transcripts here had messages nine minutes apart asking
+  Claude, in different words, to take over git operations going forward —
+  they were separate Claude Code sessions (likely separate terminal tabs)
+  active at the same time, not two independent occasions. Treat near-
+  simultaneous echoes like this as one data point, not two reinforcing
+  instances, or repetition counts get inflated by concurrency rather than by
+  real repeated evidence.
+- **Per-message `timestamp` (raw JSONL field) can disagree with the dates
+  already recorded in `observations.md` by about a day**, even after
+  adjusting for a plausible local timezone offset — the existing log appears
+  to have been dated somewhat loosely during the initial backfill rather than
+  from a strict per-message timestamp lookup. When backfilling further
+  evidence from the same narrative stretch, matching the date already used by
+  the nearest existing entry kept the log internally consistent; chasing the
+  literal timestamp on its own would have introduced new inconsistency rather
+  than fixing the old one.
+
 ## Frontmatter
 
 ```yaml
