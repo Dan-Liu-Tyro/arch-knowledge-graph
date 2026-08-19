@@ -15,3 +15,10 @@ being worked, or delete it here once it's superseded.
   READMEs already cover this with no extra artifact to maintain. Revisit once
   the project has enough moving parts that scanning those files no longer
   answers "where are we" quickly — that's the actual trigger, not a fixed date.
+- **Better Claude Code ↔ Rovo-agent (Arc) communication than Confluence.**
+  Confluence is the only channel today (decision 6) and is being tried first
+  regardless. Raised 2026-08-19: research industry-standard or more efficient
+  patterns for direct communication between a local coding agent and a
+  cloud-hosted Rovo agent, as a separate track from the MVP experiment — not
+  blocking it, and not to be pulled forward until the Confluence-based start
+  has actually been tried.

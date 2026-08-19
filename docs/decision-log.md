@@ -12,9 +12,10 @@ sequencing from scratch.
 
 ## Problem
 
-- Architecture stream (AI uplift program) built a Rovo-based agent (Atlassian)
-  that solution designers open from within Confluence to review/update design
-  docs against org architecture principles, guardrails, and patterns.
+- Architecture stream (AI uplift program) built a Rovo-based agent, **Arc**
+  (Atlassian), that solution designers open from within Confluence to
+  review/update design docs against org architecture principles, guardrails,
+  and patterns. Arc is already built and in daily use, with observed benefit.
 - Canonical architecture knowledge currently lives across 100+ Confluence pages
   of inconsistent quality. Rovo's RAG grounding inherits that noise — hard to
   control what counts as canonical.
@@ -134,6 +135,19 @@ plain RAG.
    - Not started, not urgent — no component work has begun on this. If an MVP
      experiment happens first (see `docs/mvp-proposal.md`), it tests the
      hypothesis by annotating existing pages, not by building this pipeline.
+6. **Two-agent model: Arc (Rovo) for daily retrieval, Claude Code for local
+   structured grounding.** Arc already works and is used daily, but has no
+   reliable local folder structure to ground its behaviour/skills, and no
+   structured-information storage — that gap is what this project exists to
+   fill, not a replacement for Arc. Confluence is currently the **only**
+   channel between the two agents: the Atlassian MCP connector can read/write
+   Confluence but cannot invoke or query Rovo/Arc directly, and a deployed
+   query-service is milestone 2.1+ (`docs/program-roadmap.md`), not now. Any
+   near-term exchange in either direction happens by reading or writing a
+   Confluence page — there is no live channel yet. Investigating better,
+   more direct communication between Claude Code and Rovo-based agents is a
+   deliberately separate, deferred task — see `docs/backlog.md` — not part of
+   the current MVP.
 
 ## Constraints identified
 
