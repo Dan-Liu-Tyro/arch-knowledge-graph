@@ -13,7 +13,7 @@ evidence has actually shown: `active` (one instance, not yet tested again),
 contradiction both exist), `revised` (superseded by an updated version),
 `abandoned` (evidence or a later statement undermined it).
 
-11 entries, 17 supporting and 0 contradicting evidence items.
+11 entries, 19 supporting and 0 contradicting evidence items.
 
 ## Contested or revised
 
@@ -28,11 +28,11 @@ first time real contradicting evidence shows up.
 | Treat architectural positions as revisable hypotheses, not settled best practice | active | preference | 1 | 0 | [`evidence-over-assumed-best-practice.md`](principles/evidence-over-assumed-best-practice.md) |
 | Getting the foundation right outranks starting the visible work | active | hypothesis | 1 | 0 | [`foundation-before-features.md`](principles/foundation-before-features.md) |
 | Generated outputs must never become sources of truth | active | hypothesis | 1 | 0 | [`generated-outputs-are-not-sources.md`](principles/generated-outputs-are-not-sources.md) |
+| Decisions are artifacts; the reasoning is the thing worth keeping | reinforced | preference | 3 | 0 | [`decisions-are-artifacts.md`](principles/decisions-are-artifacts.md) |
+| Choose the least infrastructure that meets the need, and name the revisit trigger | reinforced | hypothesis | 3 | 0 | [`least-infrastructure-first.md`](principles/least-infrastructure-first.md) |
 | Structure for extraction before there is a plan to extract | reinforced | hypothesis | 3 | 0 | [`structure-for-extraction.md`](principles/structure-for-extraction.md) |
 | Curation beats accumulation — the quality gate is the architecture | reinforced | hypothesis | 2 | 0 | [`curation-over-accumulation.md`](principles/curation-over-accumulation.md) |
-| Decisions are artifacts; the reasoning is the thing worth keeping | reinforced | preference | 2 | 0 | [`decisions-are-artifacts.md`](principles/decisions-are-artifacts.md) |
 | Instrument before there is a question to answer | reinforced | hypothesis | 2 | 0 | [`instrument-before-the-question.md`](principles/instrument-before-the-question.md) |
-| Choose the least infrastructure that meets the need, and name the revisit trigger | reinforced | hypothesis | 2 | 0 | [`least-infrastructure-first.md`](principles/least-infrastructure-first.md) |
 
 ## Working preferences
 

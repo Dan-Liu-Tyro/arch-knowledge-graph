@@ -109,3 +109,25 @@ paragraph of the reply.
 
 **Rule.** Anything the user will copy and run gets read once more before sending. A
 wrong command spends their turn, not mine.
+
+---
+
+## Append architecture-learning observations as they happen, not on request
+
+**What happened.** `architecture-learning/README.md` specifies that observations get
+appended to `observations.md` during the conversation, at near-zero cost, without
+stopping to decide whether they matter. Across a session containing several
+qualifying moments (a dashboard deferred to backlog with a named trigger, a request
+that project decisions live in the repo rather than in memory), none were captured
+until the user pointed out the component should be "conversationally aware" — at
+which point I had to reconstruct them from earlier turns instead of catching them
+live.
+
+**Cost.** None yet, since reconstruction from the same session was still possible.
+The cost would be real in a longer session, or once memory of the conversation
+fades.
+
+**Rule.** When a conversation touches this project, treat a one-line
+`observations.md` append as part of finishing that turn — the same way a decision
+gets written to `decision-log.md` in the turn it's made — not a step that waits for
+a reminder.

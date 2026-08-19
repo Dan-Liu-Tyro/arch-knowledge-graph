@@ -4,9 +4,9 @@ kind: architectural
 form: preference
 status: reinforced
 type: inferred
-support: 2
+support: 3
 contradict: 0
-updated: 2026-08-17
+updated: 2026-08-19
 ---
 
 # Decisions are artifacts; the reasoning is the thing worth keeping
@@ -21,7 +21,11 @@ questions visibly open. The reasoning trail is a deliverable, not overhead.
 - **Supports.** When I flagged the log had gone stale, the instruction was "fix it based on your
   judgement", and substantial rewrites recording *why* things changed were accepted
   without pushback.
+- **Supports.** Asked directly for a standing rule that project decisions be written into repo
+  docs rather than left in Claude's own cross-session memory — "it needs to be remembered at
+  project level, not just in your memory."
 
 ## Status history
 
 - 2026-08-17 · created → reinforced
+- 2026-08-19 · third supporting instance (repo-not-memory policy request) → reinforced
