@@ -125,6 +125,9 @@ plain RAG.
    control over creating this) → Rovo indexes that clean space for grounding.
    Architects edit the git source of truth, not raw Confluence, to preserve
    quality control.
+   - Not started, not urgent — no component work has begun on this. If an MVP
+     experiment happens first (see `docs/mvp-proposal.md`), it tests the
+     hypothesis by annotating existing pages, not by building this pipeline.
 
 ## Constraints identified
 
