@@ -149,6 +149,11 @@ plain RAG.
 
 ## Open questions (not yet decided)
 
+- **Whether to adopt an MVP-first reframing of decision 3 and the schema itself**
+  — see [`docs/mvp-proposal.md`](mvp-proposal.md), recovered from a lapsed
+  session where it was assessed but never decided. Blocks on a real question
+  set and known-canonical/superseded Confluence pages, which only a human
+  architect can supply.
 - Concrete schema: entity types, relationship types, folder layout, frontmatter
   shape.
 - Confluence publish/sync mechanism (git → Confluence): generation approach,
