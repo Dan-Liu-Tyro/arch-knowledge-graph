@@ -169,9 +169,15 @@ Resolved since first draft:
 - Atlassian MCP connector capability — answered under Constraints above
   (Confluence/Jira CRUD and search, no Rovo agent invocation).
 - Repo location/name and whether to `git init` — done. This workspace is the
-  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default
-  branch and changes landing via reviewed PRs per org change-management
+  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default,
+  protected branch that only moves via reviewed PR, per org change-management
   standards.
+- **Branching during the design phase:** day-to-day work happens on a
+  long-lived `plan` branch rather than a PR per change, by explicit request —
+  "create branch called plan... until we reach a milestone" — to keep pace as
+  a solo effort without per-change review friction. `main` is unaffected by
+  this and stays PR-gated. The milestone that triggers a `plan → main` PR was
+  named as a trigger up front but never made concrete; see Open questions.
 
 ## Next steps
 
