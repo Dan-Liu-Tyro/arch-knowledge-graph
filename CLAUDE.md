@@ -18,6 +18,7 @@ standards (Kotlin preferred for complex applications).
 
 ```
 docs/decision-log.md      running design record — the primary artifact
+docs/backlog.md           parked feature ideas, not yet decided or scheduled
 docs/component-model.md   component boundaries, dependency + promotion rules
 components/kg-core/       schema contract (SCHEMA.md), validation, traversal
 components/kg-content/    the curated graph — entity files, data only
@@ -83,6 +84,16 @@ wrong, update it in the same change.
   design decision is made, changed, or reversed in conversation, append/update it
   there — decisions are explicitly marked tentative and open to revision, so
   editing existing entries is expected, not just appending.
+- **Project state lives in the repo, not in Claude's memory.** Claude's own
+  cross-session memory (under `~/.claude/`) is for lessons about how Claude
+  should work — corrected preferences, procedural mistakes to avoid — never for
+  facts about this project's design or status. Any change to the project or
+  decision made in conversation must be written into the repo in the same
+  turn: `docs/decision-log.md` for decisions, constraints, and open questions;
+  `docs/backlog.md` for deferred feature ideas; a component's `README.md` when
+  its purpose, boundary, or dependencies change. If it isn't in one of those
+  files, it didn't happen, as far as the next session (or a teammate) is
+  concerned.
 - Keep prose wrapped to ~80 columns to match the existing files.
 - `.idea/` is gitignored (JetBrains); it is present locally but not tracked.
 
