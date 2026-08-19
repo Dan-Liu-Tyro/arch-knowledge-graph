@@ -26,6 +26,7 @@ components/confluence-ingest/    inbound: Confluence pages → draft entities
 components/confluence-publish/   outbound: entities → generated pages
 components/query-service/        v2, deferred — do not build yet
 components/claude-code-access/   local query glue for Claude Code
+components/local-agent/          MVP: local mirror of Arc, no production access
 meta/procedural-memory/          operational lessons — read lessons.md early
 meta/architecture-learning/      evidence-based record of demonstrated style
 meta/token-tracking/             token usage data + summarize.py

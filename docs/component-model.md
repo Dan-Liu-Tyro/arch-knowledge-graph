@@ -22,6 +22,7 @@ not know about its consumers; this document is how the filesystem enforces it.
 | `confluence-publish` | Outbound. Generates one structured page per entity and publishes to the dedicated space. | Not started | Kotlin or scripts |
 | `query-service` | v2. Network-reachable query interface so cloud-hosted Rovo can reach the graph. Deployed via TAP/CTAP. | Deferred | Kotlin |
 | `claude-code-access` | Local access glue so Claude Code can read and traverse the graph from the filesystem. | Not started | Scripts |
+| `local-agent` | MVP-only, deliberately outside the dependency graph below. A local mirror of Arc's own Constitution structure, testing whether structured grounding helps at all, with zero production access. | MVP | Markdown, no code |
 
 ## Dependency rules
 
@@ -45,6 +46,12 @@ claude-code-access ┘
   pressure, and the one whose violation costs the most later.
 - Shared behaviour that two integrations need belongs in `kg-core`, or it is not
   shared behaviour.
+- **`local-agent` is a deliberate, temporary exception to "dependencies point
+  inward to `kg-core`."** It's testing whether structured grounding is valuable
+  at all, using its own minimal format, before committing to `kg-core`'s full
+  schema — see the component's own README. This is not a precedent for other
+  components skipping `kg-core`; it's justified only because the schema itself
+  is what's still in question.
 
 ### The `meta/` tier
 

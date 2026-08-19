@@ -23,6 +23,7 @@ dependency rules, and promotion criteria.
 | [`confluence-publish`](components/confluence-publish) | Entities → generated pages |
 | [`query-service`](components/query-service) | v2, deferred — remote query surface |
 | [`claude-code-access`](components/claude-code-access) | Local query glue |
+| [`local-agent`](components/local-agent) | MVP: a local mirror of Arc, no production access |
 
 Start with [`components/kg-core/SCHEMA.md`](components/kg-core/SCHEMA.md) — the
 schema is the critical path, and everything else is shaped by it.
