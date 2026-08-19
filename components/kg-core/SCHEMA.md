@@ -5,6 +5,10 @@ frontmatter contract of the architecture knowledge graph. Nothing here is
 settled; this exists to be argued with. Decisions that survive review get
 promoted into `docs/decision-log.md`.
 
+Note: an MVP path (`docs/mvp-proposal.md`) may test the underlying hypothesis
+before this schema is built against. If so, this stays the reference model for
+later, not the first thing implemented.
+
 Design goals, in priority order:
 
 1. **Typed relationships must support contradiction detection and dependency
