@@ -102,6 +102,23 @@ plain RAG.
      allowance is **not** available locally — verified against the transcripts — so
      the budget figure has to be supplied by the user. Attribution to features is
      solved by the `gitBranch` field already present in the data.
+   - Added `docs/backlog.md` for feature ideas that are deferred, not decided
+     against — a dashboard for component/feature status was the first entry, parked
+     because at six components and no code the existing docs already answer "where
+     are we." Made explicit in `CLAUDE.md` that project state (decisions, backlog
+     items, component contracts) must be written into the repo, never left only in
+     Claude's cross-session memory, since the repo is what a future session or a
+     teammate can actually read.
+   - Split `architecture-learning` capture into two mechanisms with deliberately
+     different costs: live, near-zero-cost append to `observations.md` during
+     conversation (the default — a lapse in following this during one session is
+     what prompted the split), and a separate, occasional audit/backfill pass over
+     stored session transcripts (`~/.claude/projects/<slug>/*.jsonl`, the same
+     source `token-tracking` already reads, via the new
+     `architecture-learning/extract_transcript.py`) for whatever live capture
+     missed. Transcript retention is unverified beyond "present today back to
+     project start" — no rotation/cleanup policy is known — so backfill is
+     best-effort recovery, not a substitute for live capture.
 5. **Confluence flow (planned direction, not yet designed in detail):** curate
    truth in the local git KG → generate structured pages (one per entity,
    consistent template) → publish into a dedicated Confluence space (user has

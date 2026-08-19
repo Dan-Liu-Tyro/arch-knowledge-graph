@@ -48,8 +48,8 @@ paths or does index arithmetic in the same turn you write it.
 `meta/` observes the process of building the project rather than participating in
 it. **`components/` must never depend on `meta/`** — that would tie an extractable
 component to this project's history. The repo's only executables live here —
-`token-tracking/summarize.py` and `architecture-learning/reindex.py`, both stdlib
-only.
+`token-tracking/summarize.py`, `architecture-learning/reindex.py`, and
+`architecture-learning/extract_transcript.py`, all stdlib only.
 
 `meta/architecture-learning/` is two layers: append a line to `observations.md`
 during a conversation (no read needed), and promote to `principles/<slug>.md` only

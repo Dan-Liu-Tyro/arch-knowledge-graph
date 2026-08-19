@@ -16,10 +16,11 @@ as conversations happen, because the evidence is only capturable while it is fre
 ## Structure
 
 ```
-INDEX.md          generated routing table — the only file read on a normal session
-observations.md   append-only raw capture, one line per observation
-principles/       one file per principle, carrying its own evidence
-reindex.py        regenerates INDEX.md from principle frontmatter
+INDEX.md                generated routing table — the only file read on a normal session
+observations.md         append-only raw capture, one line per observation
+principles/             one file per principle, carrying its own evidence
+reindex.py              regenerates INDEX.md from principle frontmatter
+extract_transcript.py   condenses a session transcript for audit/backfill
 ```
 
 ## Why split, and why not for the reason you might expect
@@ -118,6 +119,59 @@ the premature certainty this redesign exists to remove.
    docstring.
 5. **Mark the observation** with `supports:<id>` or `contradicts:<id>`, or leave it
    `unpromoted`. Unpromoted is the honest default.
+
+## Audit and backfill from transcripts
+
+Live capture (above) is the default and should stay near-zero-cost. This is the
+deliberately separate, occasional counterpart: a detached pass over past session
+transcripts to catch what live capture missed, run whenever, decoupled from
+whatever task is active in the current session.
+
+**Source.** Claude Code writes one `*.jsonl` transcript per session to
+`~/.claude/projects/<slugified-project-path>/*.jsonl` — the same files
+`meta/token-tracking/summarize.py` already reads for cost data. The slug is the
+absolute repo path with `/` replaced by `-`; for this repo that directory is
+`-Users-bliu-code-claude-workspace-arch-knowledge-graph`. Verified present
+2026-08-19: four files, dating back to this project's first session on 2026-08-17.
+
+**Process.**
+1. List the transcripts in that directory. Each filename is a session UUID with
+   no human-legible summary — use `ls -la` for dates/sizes as a first filter, and
+   expect to open a few to identify which ones matter.
+2. Run `python3 meta/architecture-learning/extract_transcript.py <path>` per
+   transcript. This strips tool payloads, `thinking` blocks, and sidechain
+   (subagent) traffic by default, leaving only the user/assistant dialogue —
+   read this output, not the raw transcript.
+3. Read the extract against `INDEX.md` (not the principle files) the same way a
+   live observation would be checked: new evidence for an existing principle, a
+   new principle, or genuinely not durable.
+4. Backfill into `observations.md` and the relevant principle file(s) exactly as
+   the live working-practice steps above describe, then `reindex.py`.
+
+**Things to watch out for.**
+- **Cost is real here, unlike live capture.** Reading and interpreting a
+  transcript after the fact costs input and reasoning tokens; there is no free
+  shell-append step. Batch this rather than running it per session.
+- **Retention is unverified, not guaranteed.** All that's confirmed is that four
+  files exist today going back to project start. There's no known rotation or
+  cleanup policy for `~/.claude/projects/`, so an audit run today may not be able
+  to reach sessions that were possible to audit last week — treat this as
+  best-effort recovery of whatever still exists, not a permanent archive to rely
+  on for anything durable.
+- **The directory name is derived from the repo's absolute path.** If the repo is
+  ever moved or renamed, its slug changes and older transcripts stay filed under
+  the old slug — an audit that only looks at the current project's directory
+  will silently miss them. Check for other `-Users-bliu-...` directories whose
+  name is a plausible earlier path if a gap in history is suspected.
+- **Sidechain (subagent) messages are excluded by default.** `extract_transcript.py`
+  drops any record with `isSidechain: true` unless run with
+  `--include-sidechains`. Subagent work can contain genuine evidence too, but
+  mixing it into the primary dialogue by default made early testing harder to
+  read.
+- **Cross-check before writing.** Several existing `observations.md` entries were
+  already backfilled from these same early sessions when this component was
+  first built. Check an extract against existing entries before adding — the
+  goal is to catch what's missing, not to duplicate what's already there.
 
 ## Frontmatter
 
