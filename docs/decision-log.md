@@ -148,6 +148,21 @@ plain RAG.
    more direct communication between Claude Code and Rovo-based agents is a
    deliberately separate, deferred task — see `docs/backlog.md` — not part of
    the current MVP.
+   - **Three-step local roadmap for closing the gap, each step required to add
+     visible business value on its own** rather than deferring value to a
+     final delivery:
+     1. Claude Code reads Confluence directly (current). Open question:
+        what can Claude Code add on top of what Arc already provides —
+        not duplicate Arc's retrieval.
+     2. Arc calls on Claude Code for a capability that facilitates Arc's own
+        service. Mechanism not yet decided.
+     3. Arc sends information to Claude Code for reliable local storage.
+        Mechanism not yet decided.
+   - **Both this local roadmap and the program's own phase/milestone roadmap
+     (`docs/program-roadmap.md`) are guiding, not fixed — but changing either
+     one requires the user's explicit approval before it's edited here.**
+     Discovery may reveal a different priority is more valuable; that is a
+     reason to propose a change, not to make one unilaterally.
 
 ## Constraints identified
 

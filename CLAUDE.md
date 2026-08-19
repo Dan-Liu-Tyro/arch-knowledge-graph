@@ -103,6 +103,13 @@ wrong, update it in the same change.
   been observed to lapse across a whole session without a reminder. Treat a
   session with no entries in either file as something to ask about, not as
   quiet evidence that nothing qualified.
+- **Roadmap and milestone scope changes need explicit approval, not just
+  good reasoning.** Both the program's phase/milestone roadmap
+  (`docs/program-roadmap.md`) and the local three-step integration plan
+  (decision 6 in `docs/decision-log.md`) are explicitly flexible if discovery
+  changes priorities — but that's a reason to propose a change and ask, never
+  to edit the committed phases/milestones unilaterally on the strength of a
+  good argument. Flag it, wait for a clear yes, then write it down.
 - Keep prose wrapped to ~80 columns to match the existing files.
 - `.idea/` is gitignored (JetBrains); it is present locally but not tracked.
 
