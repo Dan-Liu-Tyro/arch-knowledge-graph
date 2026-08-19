@@ -4,6 +4,12 @@ Running record of the design discussion for the Architecture Knowledge Graph.
 Kept as a living doc — append/update as decisions firm up or change. Not final;
 explicitly open to revision as constraints become clearer.
 
+This project is one stream's work within the org's wider Architecture AI
+Uplift program. See [`docs/program-roadmap.md`](program-roadmap.md) for the
+program's own milestone tracker and evaluation plan (the AKB) — read that
+before assuming this repo needs to invent its own success criteria or
+sequencing from scratch.
+
 ## Problem
 
 - Architecture stream (AI uplift program) built a Rovo-based agent (Atlassian)
@@ -156,7 +162,19 @@ plain RAG.
   — see [`docs/mvp-proposal.md`](mvp-proposal.md), recovered from a lapsed
   session where it was assessed but never decided. Blocks on a real question
   set and known-canonical/superseded Confluence pages, which only a human
-  architect can supply.
+  architect can supply. Now confirmed by the program roadmap: milestone 2.1
+  ("active Knowledge Graph") is Phase 2, not the current phase, and the AKB's
+  50+-question Golden Evaluation Set is the same ask as the MVP proposal's
+  question set, at program scale.
+- **Claude Cowork's role is undefined here.** The program roadmap's milestone
+  1.1 asks explicitly for defining how Rovo, Claude Code, *and* Claude Cowork
+  collaborate; this repo's design (`claude-code-access`) only accounts for
+  Rovo and Claude Code.
+- **Whether milestone 1.1's "in progress" status matches this repo's actual
+  state.** `kg-content` has zero entities. Either curation progress is
+  happening outside this repo (workflow/tagging/tooling decisions could count
+  before any entity exists) or the tracker is ahead of reality — worth
+  confirming which rather than assuming either.
 - Concrete schema: entity types, relationship types, folder layout, frontmatter
   shape.
 - Confluence publish/sync mechanism (git → Confluence): generation approach,
