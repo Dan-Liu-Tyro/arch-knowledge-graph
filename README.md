@@ -1,4 +1,4 @@
-# Architecture Knowledge Graph (working title)
+# Architecture AI SDLC uplift
 
 Local, git-versioned knowledge graph to ground architecture knowledge (principles,
 guardrails, patterns, reference architectures) for Tyro's AI uplift program —
