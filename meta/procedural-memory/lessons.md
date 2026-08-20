@@ -152,3 +152,25 @@ the user asked what "decision 3" actually was.
 they're independently maintained. Quote the decision's name, not a number, from
 either document. If a number is unavoidable, verify it against
 `docs/decision-log.md` specifically, since that is the canonical numbered list.
+
+---
+
+## Never run a command whose output is a credential, even to debug
+
+**What happened.** While diagnosing a `gh auth status` failure that turned out to
+be the already-documented sandbox TLS block (see "Test an environment hypothesis
+before proposing a config change," above — same `OSStatus -26276` error), I ran
+`gh config get -h github.com oauth_token` and `security find-generic-password` to
+check whether the stored token was readable. The first command printed the user's
+live GitHub OAuth token in plaintext into the conversation transcript.
+
+**Cost.** A real, live credential exposed in a transcript that may be logged or
+reviewed later, for a check that didn't need the value itself — only whether a
+lookup succeeded.
+
+**Rule.** When probing whether a credential exists or is readable, check for
+success some other way (exit code, a masked/boolean signal, a tool built for the
+purpose) — never run the command that echoes the secret itself, even for one's own
+diagnostic use, even locally. And re-check `lessons.md` for a matching prior
+incident before re-diagnosing a familiar-looking failure at all; this exact TLS
+error was already on record.
