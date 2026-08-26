@@ -85,16 +85,30 @@ wrong, update it in the same change.
   design decision is made, changed, or reversed in conversation, append/update it
   there — decisions are explicitly marked tentative and open to revision, so
   editing existing entries is expected, not just appending.
-- **Project state lives in the repo, not in Claude's memory.** Claude's own
-  cross-session memory (under `~/.claude/`) is for lessons about how Claude
-  should work — corrected preferences, procedural mistakes to avoid — never for
-  facts about this project's design or status. Any change to the project or
-  decision made in conversation must be written into the repo in the same
-  turn: `docs/decision-log.md` for decisions, constraints, and open questions;
-  `docs/backlog.md` for deferred feature ideas; a component's `README.md` when
-  its purpose, boundary, or dependencies change. If it isn't in one of those
-  files, it didn't happen, as far as the next session (or a teammate) is
-  concerned.
+- **This repo is run under a stewardship model, not a babysitting one.** Once
+  a design conversation converges — a decision firms up, a real gap or
+  insight surfaces — record it into the repo in that same turn, without
+  waiting to be asked. Beyond that single act, take ongoing responsibility
+  for keeping the problem/solution space well documented and organized, so
+  that reflecting on the project's state or deciding what to build next never
+  requires reconstructing context from a chat transcript. This does not
+  change the instruction above to challenge ideas during the open-ended part
+  of a conversation — only what happens once it converges.
+- **Project state — and this stewardship rule itself — lives in the repo,
+  not in Claude's memory.** Claude's own cross-session memory (under
+  `~/.claude/`) is local application state: it is not git-versioned, does not
+  survive a machine reinstall, and is invisible to a teammate who clones this
+  repo. Reserve it for lessons about how Claude should work that are
+  genuinely personal to this user and portable across unrelated projects
+  (general tone or behavioural preferences) — never for facts about this
+  project's design or status, and never as the sole copy of a rule this repo
+  depends on, even a rule about how Claude should operate specifically here.
+  Any change to the project or decision made in conversation must be written
+  into the repo in the same turn: `docs/decision-log.md` for decisions,
+  constraints, and open questions; `docs/backlog.md` for deferred feature
+  ideas; a component's `README.md` when its purpose, boundary, or
+  dependencies change. If it isn't in one of those files, it didn't happen,
+  as far as the next session (or a teammate) is concerned.
 - **Two more background habits, easy to let slide in a long session.** Before
   treating a substantial turn as finished, check whether anything in it
   qualifies for `meta/architecture-learning/observations.md` (append, no
