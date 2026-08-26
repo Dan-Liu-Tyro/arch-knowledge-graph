@@ -189,6 +189,37 @@ plain RAG.
      only on the files in `constitution/`") to include live-fetched
      General-tier references — update that component's README boundary in
      the same change that implements it.
+8. **`meta/procedural-memory` splits into `lessons.md` (project-specific) and
+   `universal.md` (generalizes beyond this project) — Claude's cross-session
+   memory is no longer a second master to keep in sync with it.** Mirrors
+   the raw/promoted split `architecture-learning` already has, without that
+   component's index-and-reindex tooling, since at ten entries a plain
+   two-file split is enough and every entry here is already curated at
+   write time. `universal.md` entries are candidates for manual promotion
+   into another project's own procedural memory later — the same
+   "move, not automatic reach" pattern already used for promoting a
+   `components/` piece out of this repo (`docs/component-model.md`), never
+   an automatic sync.
+   - **Rejected alternative:** moving project-specific lessons into a new
+     `components/procedure-memory`. `docs/component-model.md` defines
+     `meta/` as holding what "observes the process of building this
+     project" — project-specific lived experience is exactly that, not an
+     exception to it — and procedural memory has none of what
+     `components/` promotion requires (a stable contract, a real consumer
+     in the dependency graph, its own deployment lifecycle).
+   - Claude's own cross-session memory is now treated as disposable scratch
+     rather than a parallel master: reflected on periodically, with
+     anything reusable distilled into `lessons.md` or `universal.md`
+     depending on scope, rather than kept in step with the repo by hand.
+     This removes the drift risk of maintaining the same fact in two
+     unsynced places.
+   - **Carve-out, not an exception:** a small set of direct standing
+     instructions the user has stated as applying in every session
+     regardless of project (e.g. "always challenge my ideas") stays solely
+     in pinned Claude memory. Their entire point is to auto-load without
+     this repo being open, which no file under `meta/` can do. These were
+     never lived experience distilled from working on this project, so
+     they were never in scope for this decision.
 
 ## Constraints identified
 

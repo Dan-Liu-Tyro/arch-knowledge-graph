@@ -4,7 +4,19 @@ Operational lessons from working on this project — mistakes made, and the rule
 prevents repeating them. Unlike `architecture-learning`, this is meant to change
 behaviour immediately.
 
-The content lives in [`lessons.md`](lessons.md).
+The content lives in two files, split by scope:
+
+- [`lessons.md`](lessons.md) — mistakes whose rule is tied to something specific
+  about this project (its own documents, components, or tooling).
+- [`universal.md`](universal.md) — mistakes whose rule doesn't depend on anything
+  about this project at all, and so is a candidate for manual promotion into
+  another project's own procedural memory later.
+
+This mirrors the raw/promoted split `architecture-learning` already uses, but
+without that component's index-and-reindex machinery: at this component's current
+size (ten entries total), a plain two-file split is enough, and each entry is
+already curated at write time rather than starting as a raw, unjudged capture.
+Revisit if either file grows enough that finding an entry gets slow.
 
 ## The mechanism, stated honestly
 
@@ -14,8 +26,8 @@ exist here, and only two of them load automatically:
 | Layer | Loads automatically | Versioned and reviewable | Holds |
 |---|---|---|---|
 | `CLAUDE.md` | **Yes** | Yes | The short, always-relevant rules |
-| This component | No — only via the `CLAUDE.md` pointer | Yes | The full lesson set with its evidence |
-| Claude Code session memory | **Yes** | No | Only what the user taught or corrected directly |
+| This component | No — only via the `CLAUDE.md` pointer | Yes | The full lesson set with its evidence, split project-specific vs. universal |
+| Claude Code session memory | **Yes** | No | A small set of direct, standing instructions the user has stated as applying in every session, regardless of project |
 
 So the load-bearing part of this design is the pointer in `CLAUDE.md`, not the
 existence of `lessons.md`. That pointer is what makes the lessons reachable at all,
@@ -36,11 +48,17 @@ about architecture, is curated slowly, and has no wired-up consumer yet. This on
 records how *I* got something wrong and what to do instead. Different subject,
 different urgency.
 
-**Versus session memory:** session memory holds standing preferences the user
-stated or corrected me on — it is their instructions to me, and it persists outside
-this repo where nobody can review it in a diff. Self-observed mistakes belong here
-instead, where they are visible and can be argued with. A lesson only goes in both
-places if it must survive in a session where this repo is not loaded.
+**Versus session memory:** session memory is not a second master to keep in sync
+with this component — that produced exactly the drift risk the line below warns
+against. Instead, session memory is treated as disposable scratch: periodically
+reflected on, with anything reusable distilled into `lessons.md` or `universal.md`
+depending on scope, and otherwise left unmanaged. The one thing that stays solely
+in session memory, by necessity rather than choice, is a small set of direct
+standing instructions the user has stated as applying in *every* session
+regardless of project (for example, "always challenge my ideas") — no file under
+`meta/` can deliver that, since this repo's `meta/` only loads when this specific
+project is open. Those are not lived experience I derived myself, so they are out
+of scope for this component, not an exception living inside it.
 
 **Do not maintain the same lesson in two layers.** Duplication drifts, and a rule
 that disagrees with itself across files is worse than one stated once.

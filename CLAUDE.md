@@ -39,12 +39,15 @@ strongest honest objection is the useful contribution; an objection grounded in 
 user's own stated design lands harder than an appeal to external policy. Once a
 decision is made and reaffirmed, implement it well rather than relitigating it.
 
-**Read `meta/procedural-memory/lessons.md` before substantial work.** It holds
-mistakes already made on this project. Four of its rules are short enough to state
-here, because violating them is expensive: never put a credential in a command line;
-test an environment hypothesis before proposing a change to the user's config; after
-a denied tool call, ask rather than retrying a variant; run any code that derives
-paths or does index arithmetic in the same turn you write it.
+**Read `meta/procedural-memory/lessons.md` and `universal.md` before substantial
+work.** `lessons.md` holds mistakes tied to something specific about this project;
+`universal.md` holds mistakes whose rule doesn't depend on this project at all, and
+so is worth checking before starting on any project. Four of `universal.md`'s rules
+are short enough to state here, because violating them is expensive: never put a
+credential in a command line; test an environment hypothesis before proposing a
+change to the user's config; after a denied tool call, ask rather than retrying a
+variant; run any code that derives paths or does index arithmetic in the same turn
+you write it.
 
 `meta/` observes the process of building the project rather than participating in
 it. **`components/` must never depend on `meta/`** — that would tie an extractable
