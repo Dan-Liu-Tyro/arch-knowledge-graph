@@ -22,3 +22,17 @@ being worked, or delete it here once it's superseded.
   cloud-hosted Rovo agent, as a separate track from the MVP experiment — not
   blocking it, and not to be pulled forward until the Confluence-based start
   has actually been tried.
+- **Staleness check on General-tier citations.** Decision 7 accepts, without
+  solving, that a Confluence page fetched live via MCP and cited as
+  General-tier evidence can drift after the canonical source that points to
+  it was written, with nothing to flag the drift. Raised 2026-08-26: capture
+  a version/last-modified marker at the time a canonical source is curated,
+  and diff against it on each live fetch, so a stale citation surfaces
+  instead of being repeated silently.
+- **Reconcile open-ended Confluence search with the Trusted/General tiering.**
+  Decision 7's citation model only covers pages a canonical-source entry
+  already links to; anything not yet curated is reachable only through
+  open-ended CQL search, which sits outside the tiering entirely. Raised
+  2026-08-26: decide whether/how ad-hoc search results get a trust label
+  (most likely a third, lower tier) before this is used for genuine
+  discovery rather than known-reference lookup.

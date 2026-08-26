@@ -163,6 +163,32 @@ plain RAG.
      one requires the user's explicit approval before it's edited here.**
      Discovery may reveal a different priority is more valuable; that is a
      reason to propose a change, not to make one unilaterally.
+7. **Grounding answers with a two-tier citation model — Trusted vs. General —
+   set by source, not by the model's self-rated confidence.** Content drawn
+   from the local curated Constitution/canonical sources is always labeled
+   Trusted; content fetched live from Confluence/Jira via MCP is always
+   labeled General and flagged as needing human validation before being
+   relied on. The tier is mechanical (which store the content came from),
+   never a per-answer judgment call, because an LLM's own confidence in what
+   it just read is not reliably calibrated enough to gate trust on its own.
+   - **Explicit tradeoff accepted:** an agent that only answers from curated
+     sources would be safer but, with canonical-source coverage still thin,
+     too limited to get used at all. Offering clearly-labeled General-tier
+     answers alongside Trusted ones lets the agent be useful now while
+     curation catches up, instead of withholding help until coverage is
+     complete.
+   - **Known gaps accepted for now, not solved by this decision:** staleness
+     of cited Confluence pages (no version/last-modified check at fetch
+     time), and coverage (only pages a canonical-source entry already links
+     to are reachable this way — open-ended CQL search is still a fallback
+     outside this tiering, not yet reconciled with it). Parked in
+     `docs/backlog.md`.
+   - Not yet implemented: no citation format, label rendering, or
+     canonical-source pointer schema decided. Implementing this will expand
+     `components/local-agent`'s documented boundary (currently "grounded
+     only on the files in `constitution/`") to include live-fetched
+     General-tier references — update that component's README boundary in
+     the same change that implements it.
 
 ## Constraints identified
 
