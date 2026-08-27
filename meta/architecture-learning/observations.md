@@ -1,0 +1,48 @@
+# Observations
+
+Append-only raw capture. One entry per observation, newest at the bottom, never
+edited in place. Cheap to add: a shell append needs no read of this file, so
+capturing costs effectively nothing.
+
+An observation is promoted to `principles/` the first time it looks worth tracking
+as a hypothesis or preference — even from one instance, since the point of tracking
+is watching whether *later* evidence supports or contradicts it. Promotion sets
+`status: active`; it does not require repetition first. Repetition is what moves an
+entry from `active` to `reinforced` — see `INDEX.md` for the status vocabulary.
+
+Format, one line each:
+
+```
+- YYYY-MM-DD · what was observed · evidence in brief · → supports:<id> | contradicts:<id> | unpromoted
+```
+
+`supports:<id>` and `contradicts:<id>` both mean "add this to the named principle's
+evidence list" — the direction matters, because a contradiction changes that
+principle's `status` and must not be silently absorbed as if it agreed.
+
+## Log
+
+- 2026-08-17 · Chose flat files over a graph DB with a named revisit condition · decision log, decision 1 · → supports:least-infrastructure-first
+- 2026-08-17 · Framed the whole project as replacing noisy pages with a curated, gated corpus · decision log problem/goal · → supports:curation-over-accumulation
+- 2026-08-17 · Asked for components sized for later promotion out of the repo · "so that later... promoted to other projects" · → supports:structure-for-extraction
+- 2026-08-17 · Asked for a meta tier above the core project · same session, one level up · → supports:structure-for-extraction
+- 2026-08-17 · Reverted a settings workaround to stay aligned with org config · "I've reverted the settings to align with org" · → supports:org-alignment-over-convenience
+- 2026-08-17 · Pressed three times for a demonstration rather than an explanation of git state · sync / local-sync / git-pull exchange · → supports:verify-state-claims
+- 2026-08-17 · Delegated commit mechanics standing, kept branch naming and merges · "manage git for me... when you see fit" · → supports:delegate-mechanics-retain-judgement
+- 2026-08-17 · Asked for instrumentation with no present question, for later strategy · "so we have data to reason about... later" · → supports:instrument-before-the-question
+- 2026-08-17 · Accepted the PR gate after an internal-consistency argument, having explored bypassing it · main-branch exchange · → supports:curation-over-accumulation
+- 2026-08-17 · Accepted a name-based referencing fix after positional references broke · decision-log renumbering · unpromoted — one instance, plausibly just agreeing with a fix
+- 2026-08-18 · Ranked foundation work above starting the visible project work, when pushed twice to start · "It's ok to get foundation right before rushing into working on the project itself" · → supports:foundation-before-features
+- 2026-08-18 · Treated token efficiency as a design constraint on a meta component, not an afterthought · asked for the record-keeping structure to be designed "in token saving in mind" · unpromoted — overlaps instrument-before-the-question; may be its own principle about efficiency as a first-class constraint
+- 2026-08-18 · Separated two record-keeping layers by how fast each changes behaviour · procedural memory "change your behaviours instantly" vs architecture learning "mostly curating" · unpromoted — one instance, but a distinctive way to cut a design; watch for repetition
+- 2026-08-18 · Rejected the premise that best practice is knowable in advance; asked for decisions to be tracked as hypotheses with support/contradiction over time · "it's unclear whether we can see it clearly beforehand... make those decision as hypothesis" · → supports:evidence-over-assumed-best-practice
+- 2026-08-19 · Questioned whether already-built token-tracking earns its cost against the built-in usage view, willing to let it run before judging · "we might need to keep running for a while... or simply burn token for nothing" · unpromoted — audits standing infrastructure's payoff after the fact rather than deciding whether to build it; overlaps instrument-before-the-question but tests it in reverse
+- 2026-08-19 · Deferred the dashboard idea to a backlog file with a named revisit trigger rather than building it now · "put it as a feature item in backlog for later inspection" · → supports:least-infrastructure-first
+- 2026-08-19 · Required project decisions to be written into repo docs rather than left in Claude's own memory · "it needs to be remembered at project level, not just in your memory" · → supports:decisions-are-artifacts
+- 2026-08-17 · Backfilled from transcript audit: parked GitHub-connector availability as an open decision-log question rather than resolving or dropping it · "forget about github connector for now, mark it as a task later to figure out" · → supports:decisions-are-artifacts
+- 2026-08-17 · Backfilled from transcript audit: proposed a long-lived milestone-gated branch instead of a PR per change, naming the milestone as the revisit trigger · "create branch called plan just so we can keep working on this... until we reach a milestone" · → supports:least-infrastructure-first
+- 2026-08-17 · Backfilled from transcript audit: left architecture-learning's consumer undecided by design, the same decouple-now/choose-later instinct as the core/integration split · "the consumer could later be decided, for example... memory, claude.md... or... architecture agent" · → supports:structure-for-extraction
+- 2026-08-19 · Backfilled from transcript audit: brought an independent AI-generated critique of the project plan for review and held off any implementation until it was assessed · pasted a structured outside plan, asked to "let me know what you think... before actually doing any changes" · unpromoted — single instance; distinct from evidence-over-assumed-best-practice (hypothesis-tracking, not seeking outside cross-checks) and verify-state-claims (system state, not design validation)
+- 2026-08-19 · Returned to and asked to close out a previously-dropped analysis thread (the external critique) once flagged, rather than letting a completed assessment go stale unread · "yes, good catch, where do we start?" · unpromoted — single instance, plausibly just good hygiene rather than a distinct pattern; watch for repetition
+- 2026-08-19 · Pushed back on fetching full Confluence page content, preferring a thin structural layer referencing existing pages over duplicating their information · "shouldn't we build another layer of data structure on top of it instead of duplicating information?" · unpromoted — single instance; may overlap with the provenance-vs-integration-state split already in SCHEMA.md rather than being new
+- 2026-08-19 · Asked to read and understand Arc's actual Rovo implementation before documenting or building a local counterpart, rather than designing from assumption · "ask me any questions before documenting it" · → supports:verify-state-claims

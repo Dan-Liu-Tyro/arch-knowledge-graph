@@ -9,10 +9,77 @@ knowledge — principles, guardrails, patterns, reference architectures, decisio
 as the grounding source for the Architecture stream's Rovo agent (AI uplift
 program), replacing raw Confluence RAG over 100+ inconsistent pages.
 
-**Status: design phase.** There is no schema, code, build system, or test suite
-committed yet — only `README.md` and `docs/decision-log.md`. Do not invent or
-assume build/lint/test commands; there are none. If asked to add tooling, choose
-per the org language standards (Kotlin preferred for complex applications).
+**Status: design phase.** A schema draft and component scaffolding exist; no code,
+build system, or test suite is committed. Do not invent or assume build/lint/test
+commands; there are none. If asked to add tooling, choose per the org language
+standards (Kotlin preferred for complex applications).
+
+## Layout
+
+```
+docs/decision-log.md      running design record — the primary artifact
+docs/backlog.md           parked feature ideas, not yet decided or scheduled
+docs/component-model.md   component boundaries, dependency + promotion rules
+components/kg-core/       schema contract (SCHEMA.md), validation, traversal
+components/kg-content/    the curated graph — entity files, data only
+components/confluence-ingest/    inbound: Confluence pages → draft entities
+components/confluence-publish/   outbound: entities → generated pages
+components/query-service/        v2, deferred — do not build yet
+components/claude-code-access/   local query glue for Claude Code
+components/local-agent/          MVP: local mirror of Arc, no production access
+meta/procedural-memory/          operational lessons — read lessons.md early
+meta/architecture-learning/      evidence-based record of demonstrated style
+meta/token-tracking/             token usage data + summarize.py
+```
+
+## Working with the user
+
+**Challenge ideas rather than agreeing** — especially at planning stage. The
+strongest honest objection is the useful contribution; an objection grounded in the
+user's own stated design lands harder than an appeal to external policy. Once a
+decision is made and reaffirmed, implement it well rather than relitigating it.
+
+**Read `meta/procedural-memory/lessons.md` and `universal.md` before substantial
+work.** `lessons.md` holds mistakes tied to something specific about this project;
+`universal.md` holds mistakes whose rule doesn't depend on this project at all, and
+so is worth checking before starting on any project. Four of `universal.md`'s rules
+are short enough to state here, because violating them is expensive: never put a
+credential in a command line; test an environment hypothesis before proposing a
+change to the user's config; after a denied tool call, ask rather than retrying a
+variant; run any code that derives paths or does index arithmetic in the same turn
+you write it.
+
+`meta/` observes the process of building the project rather than participating in
+it. **`components/` must never depend on `meta/`** — that would tie an extractable
+component to this project's history. The repo's only executables live here —
+`token-tracking/summarize.py`, `architecture-learning/reindex.py`, and
+`architecture-learning/extract_transcript.py`, all stdlib only.
+
+`meta/architecture-learning/` is two layers: append a line to `observations.md`
+during a conversation (no read needed), and promote to `principles/<slug>.md` only
+when a pattern repeats. Read `INDEX.md` — not the principle files — to decide
+whether something is new; it is generated, so run `reindex.py` after any frontmatter
+change. Every entry needs cited evidence and a `stated`/`inferred` marker; an
+uncitable entry is a projection and reads as authoritative anyway. Prefer recording
+*how* a decision was reached, and which counter-arguments were accepted, over
+recording conclusions — a profile that only reproduces conclusions cannot push back,
+and pushback is wanted.
+
+Entries are tracked hypotheses or preferences, not settled conclusions — see
+`principles/evidence-over-assumed-best-practice.md`. Tag each piece of evidence
+`**Supports.**` or `**Contradicts.**`, and set `status`
+(`active`/`reinforced`/`contested`/`revised`/`abandoned`) to match what the evidence
+actually shows. `reindex.py` refuses to build the index if a principle has
+`contradict > 0` without an acknowledging status — never leave a contradicted
+principle at `active`/`reinforced`.
+
+`meta/token-tracking/summarize.py --by branch` gives per-feature cost. Compare
+tasks on `output` and `cache_wr`, never on cache reads — those scale with
+conversation length, not with work done.
+
+Each component's `README.md` states its purpose, boundary, dependencies, and
+extraction notes, and is treated as its contract — if a change makes a README
+wrong, update it in the same change.
 
 ## Working conventions
 
@@ -21,13 +88,55 @@ per the org language standards (Kotlin preferred for complex applications).
   design decision is made, changed, or reversed in conversation, append/update it
   there — decisions are explicitly marked tentative and open to revision, so
   editing existing entries is expected, not just appending.
+- **This repo is run under a stewardship model, not a babysitting one.** Once
+  a design conversation converges — a decision firms up, a real gap or
+  insight surfaces — record it into the repo in that same turn, without
+  waiting to be asked. Beyond that single act, take ongoing responsibility
+  for keeping the problem/solution space well documented and organized, so
+  that reflecting on the project's state or deciding what to build next never
+  requires reconstructing context from a chat transcript. This does not
+  change the instruction above to challenge ideas during the open-ended part
+  of a conversation — only what happens once it converges.
+- **Project state — and this stewardship rule itself — lives in the repo,
+  not in Claude's memory.** Claude's own cross-session memory (under
+  `~/.claude/`) is local application state: it is not git-versioned, does not
+  survive a machine reinstall, and is invisible to a teammate who clones this
+  repo. Reserve it for lessons about how Claude should work that are
+  genuinely personal to this user and portable across unrelated projects
+  (general tone or behavioural preferences) — never for facts about this
+  project's design or status, and never as the sole copy of a rule this repo
+  depends on, even a rule about how Claude should operate specifically here.
+  Any change to the project or decision made in conversation must be written
+  into the repo in the same turn: `docs/decision-log.md` for decisions,
+  constraints, and open questions; `docs/backlog.md` for deferred feature
+  ideas; a component's `README.md` when its purpose, boundary, or
+  dependencies change. If it isn't in one of those files, it didn't happen,
+  as far as the next session (or a teammate) is concerned.
+- **Two more background habits, easy to let slide in a long session.** Before
+  treating a substantial turn as finished, check whether anything in it
+  qualifies for `meta/architecture-learning/observations.md` (append, no
+  ceremony — see that component's README) or `meta/procedural-memory/lessons.md`
+  (a mistake worth a rule — see that component's README). Both are described in
+  full elsewhere in this file; this bullet exists because the habit has already
+  been observed to lapse across a whole session without a reminder. Treat a
+  session with no entries in either file as something to ask about, not as
+  quiet evidence that nothing qualified.
+- **Roadmap and milestone scope changes need explicit approval, not just
+  good reasoning.** Both the program's phase/milestone roadmap
+  (`docs/program-roadmap.md`) and the local three-step integration plan
+  (decision 6 in `docs/decision-log.md`) are explicitly flexible if discovery
+  changes priorities — but that's a reason to propose a change and ask, never
+  to edit the committed phases/milestones unilaterally on the strength of a
+  good argument. Flag it, wait for a clear yes, then write it down.
 - Keep prose wrapped to ~80 columns to match the existing files.
 - `.idea/` is gitignored (JetBrains); it is present locally but not tracked.
 
 ## Architecture of the intended system
 
-Three decisions shape everything and should be treated as the current baseline
-(all recorded in `docs/decision-log.md`, all revisable):
+Four decisions shape everything and should be treated as the current baseline
+(all recorded in `docs/decision-log.md`, all revisable). Cite them by name rather
+than by number — the log is appended to and renumbering silently breaks
+cross-references:
 
 1. **File-based storage, not a graph DB.** Markdown + YAML frontmatter, git
    versioned. PR review is the quality gate. Revisit a graph DB only if traversal
@@ -36,10 +145,17 @@ Three decisions shape everything and should be treated as the current baseline
    query logic. Integration layer = Confluence ingest inbound, Confluence publish
    + Rovo grounding outbound, and local access for Claude Code. Design so that
    swapping local file reads for a deployed query service is a transport change,
-   not a redesign.
+   not a redesign. `docs/component-model.md` is how the filesystem enforces this:
+   dependencies point inward to `kg-core`, and integration components must never
+   import each other — that rule is the one most likely to be broken and the most
+   expensive to unpick.
 3. **Confluence is an output, not the source of truth.** Curate in git → generate
    one structured page per entity → publish to a dedicated clean Confluence space
    → Rovo indexes that space. Architects edit git, never raw Confluence.
+4. **Components over one application.** Six components under `components/`, sized
+   so that pieces which outgrow this repo can be promoted out as a move rather
+   than an untangling. Plus a `meta/` tier that observes the project without being
+   part of it. See the Layout section above.
 
 The graph shape is the point: typed relationships (`pattern REQUIRES guardrail`,
 `principle CONFLICTS_WITH pattern`, `decision SUPERSEDES decision`,
@@ -65,7 +181,7 @@ context/search. There is no tool that runs or directs the Rovo agent itself.
 
 Two consequences for design work:
 
-- The git → Confluence publish path (decision 3) can be driven directly from
+- The git → Confluence publish path (Confluence-as-output) can be driven from
   Claude Code via `createConfluencePage` / `updateConfluencePage`; it does not
   need a separate deployed integration to get started.
 - Grounding Rovo still has to go through Rovo indexing the published Confluence

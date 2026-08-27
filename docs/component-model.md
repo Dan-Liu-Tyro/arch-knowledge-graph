@@ -1,0 +1,111 @@
+# Component Model
+
+How this repo is carved up, and the rules that keep each piece extractable.
+
+The repo is deliberately structured as a set of loosely coupled components rather
+than one application. Not every component will survive, and some will outgrow this
+repo and be promoted into their own project or handed to another team. That is an
+expected outcome, not a failure — so the layout is designed to make extraction a
+move operation rather than an untangling exercise.
+
+This is the structural expression of decision 2 in `docs/decision-log.md`
+("decouple KG core from the integration layer"). That decision said the core must
+not know about its consumers; this document is how the filesystem enforces it.
+
+## Components
+
+| Component | Responsibility | Status | Likely language |
+|---|---|---|---|
+| `kg-core` | Schema contract, validation, query/traversal logic. Knows nothing about Confluence, Rovo, or Claude. | Schema drafted | Kotlin if it grows into a service; scripts fine while exploring |
+| `kg-content` | The curated graph itself — entity files conforming to the schema. Data, not code. | Empty | n/a (Markdown + YAML) |
+| `confluence-ingest` | Inbound. Reads existing Confluence pages and helps turn them into candidate entities. One-off-ish migration aid. | Not started | Whatever is fastest; this is throwaway-shaped |
+| `confluence-publish` | Outbound. Generates one structured page per entity and publishes to the dedicated space. | Not started | Kotlin or scripts |
+| `query-service` | v2. Network-reachable query interface so cloud-hosted Rovo can reach the graph. Deployed via TAP/CTAP. | Deferred | Kotlin |
+| `claude-code-access` | Local access glue so Claude Code can read and traverse the graph from the filesystem. | Not started | Scripts |
+| `local-agent` | MVP-only, deliberately outside the dependency graph below. A local mirror of Arc's own Constitution structure, testing whether structured grounding helps at all, with zero production access. | MVP | Markdown, no code |
+
+## Dependency rules
+
+The only rule that really matters: **dependencies point inward, toward
+`kg-core`.**
+
+```
+confluence-ingest ─┐
+confluence-publish ─┼─→ kg-core ←─ (reads) ─ kg-content
+query-service     ─┤
+claude-code-access ┘
+```
+
+- `kg-core` depends on nothing in this repo. If it ever needs to import from a
+  component that talks to Confluence, the abstraction is wrong.
+- `kg-content` is data. It conforms to the schema but does not depend on code, and
+  nothing should require code to be readable.
+- **Integration components never import each other.** `confluence-publish` and
+  `query-service` both need to read the graph; both go through `kg-core`, not
+  through each other. This is the rule most likely to be broken under time
+  pressure, and the one whose violation costs the most later.
+- Shared behaviour that two integrations need belongs in `kg-core`, or it is not
+  shared behaviour.
+- **`local-agent` is a deliberate, temporary exception to "dependencies point
+  inward to `kg-core`."** It's testing whether structured grounding is valuable
+  at all, using its own minimal format, before committing to `kg-core`'s full
+  schema — see the component's own README. This is not a precedent for other
+  components skipping `kg-core`; it's justified only because the schema itself
+  is what's still in question.
+
+### The `meta/` tier
+
+`meta/` holds components that observe the *process* of building this project rather
+than participating in it — see [`../meta/README.md`](../meta/README.md). It sits
+outside the dependency graph above, with one hard rule:
+
+**Nothing under `components/` may depend on anything under `meta/`.**
+
+Meta components observe and are never observed. A dependency from a component to a
+meta component would tie that component to this project's history and quietly make
+it non-extractable — destroying the property this whole model exists to protect.
+
+## Contracts
+
+Each component owns a `README.md` stating its purpose, its boundary, what it
+depends on, and what would be involved in extracting it. That README is the
+contract; if a change makes the README wrong, the change needs to update it.
+
+Cross-component communication happens through the schema and the filesystem, not
+through internal function calls. Concretely: a component reads entity files (or
+calls `kg-core`), and never reaches into another component's internals. This keeps
+the eventual transport swap — local file reads becoming HTTP calls to
+`query-service` — a change in one place.
+
+## Promotion criteria
+
+A component is ready to be promoted out of this repo when all of these hold:
+
+1. It has a stated, stable contract that consumers rely on.
+2. It depends only on `kg-core`'s contract, not on its internals.
+3. It has its own tests, and they pass without the rest of the repo present.
+4. It needs its own release cadence, deployment lifecycle, or ownership — this is
+   the actual trigger; the first three are readiness, not motivation.
+
+`query-service` is the most likely first candidate, because it is the only
+component that must be deployed and promoted through
+`development → staging → production` on the org path. Deployment lifecycle is
+exactly the kind of pressure that justifies a separate project.
+
+`kg-content` is the least likely to move but the most valuable to keep clean — it
+is the asset. Tooling is replaceable; the curated graph is not.
+
+## Anti-patterns to avoid
+
+- **A shared `utils` or `common` component.** It becomes the coupling everything
+  routes through, and it is never extractable. Duplicate a little instead.
+- **Integration logic leaking into `kg-content`.** Confluence page ids in
+  frontmatter are the deliberate exception, and even that is written by tooling
+  rather than by hand.
+- **Building `query-service` early.** It is deferred for good reasons; a
+  network-reachable service with no stable schema behind it is churn with
+  deployment ceremony attached.
+- **Splitting a component before it has a second consumer.** Boundaries drawn
+  from speculation are usually wrong. The six here are drawn from decision 2's
+  distinctions, which are grounded in real differences of direction and
+  lifecycle — not from guessing.
