@@ -29,7 +29,7 @@ with zero production access.
 - A minimal local grounding format: a handful of tagged references (id,
   title, status, source link, note) — deliberately not `kg-core`'s full
   schema.
-- A local persona ("lite Arc") mirroring Arc's Constitution shape,
+- A local persona ("Arc Lite") mirroring Arc's Constitution shape,
   grounded only on the files in `constitution/`.
 - Comparing answers with and without that grounding present, on real
   questions, entirely locally.
@@ -58,7 +58,7 @@ Nothing yet.
 
 ## How to use it (MVP interaction — no new tooling)
 
-Ask a Claude Code session in this repo to act as lite Arc, grounded only
+Ask a Claude Code session in this repo to act as Arc Lite, grounded only
 on `constitution/00-soul.md` through `04-procedure-memory.md`. That is
 the entire mechanism for now — no subagent definition file, no new
 script. Formalizing this as a reusable Claude Code subagent
