@@ -220,6 +220,21 @@ plain RAG.
      this repo being open, which no file under `meta/` can do. These were
      never lived experience distilled from working on this project, so
      they were never in scope for this decision.
+9. **Formalized Arc Lite as a persisted subagent (`.claude/agents/arc-lite.md`)
+   immediately, overriding `components/local-agent/README.md`'s original
+   sequencing.** That README had said formalizing a subagent was reasonable
+   "once the Constitution content has been used and adjusted a few times, not
+   before" — at the point this was requested, the only uses had been two
+   synthetic questions invented to demonstrate the mechanism, not real
+   architecture questions. The tradeoff was surfaced explicitly and the user
+   chose to formalize now anyway rather than wait. The subagent file points at
+   `constitution/00-soul.md` through `04-procedure-memory.md` rather than
+   duplicating their content, so this doesn't fork Arc Lite's definition —
+   editing the constitution still changes its behavior with no subagent-file
+   change required. Accepted consequence: the Constitution content is
+   correspondingly less battle-tested than the original sequencing intended,
+   so early Arc Lite answers deserve more scrutiny until real questions have
+   exercised `constitution/02-canonical-sources.md` a few times.
 
 ## Constraints identified
 

@@ -56,14 +56,24 @@ meant to be a permanent second schema.
 
 Nothing yet.
 
-## How to use it (MVP interaction — no new tooling)
+## How to use it
 
-Ask a Claude Code session in this repo to act as Arc Lite, grounded only
-on `constitution/00-soul.md` through `04-procedure-memory.md`. That is
-the entire mechanism for now — no subagent definition file, no new
-script. Formalizing this as a reusable Claude Code subagent
-(`.claude/agents/`) is a reasonable next step once the Constitution
-content has been used and adjusted a few times, not before.
+Invoke the `arc-lite` subagent (`.claude/agents/arc-lite.md`) in a Claude
+Code session in this repo, or ask a session to act as Arc Lite directly.
+Either way the mechanism is the same: read `constitution/00-soul.md`
+through `04-procedure-memory.md` fresh each time and follow
+`01-working-protocol.md` exactly — the subagent file only points at those
+five files, it does not duplicate their content, so editing the
+constitution is enough to change Arc Lite's behavior without touching the
+subagent definition.
+
+The subagent file was created ahead of this component's original
+guidance to wait until the Constitution content had been used and
+adjusted "a few times" first — a deliberate, explicit choice made when
+asked, not a default. That means the Constitution content is less
+battle-tested than the original sequencing intended; treat early answers
+from it with correspondingly more scrutiny until real questions have
+exercised `02-canonical-sources.md` a few times.
 
 ## Status
 
