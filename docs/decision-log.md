@@ -236,6 +236,31 @@ plain RAG.
    so early Arc Lite answers deserve more scrutiny until real questions have
    exercised `constitution/02-canonical-sources.md` a few times.
 
+10. **Added a local-only HTML relay UI for Arc Lite (`components/local-agent/ui/`),
+    for the user's own single-person use, not a multi-user or production
+    surface.** A stdlib-only Python server relays `POST /ask` to the same
+    headless `claude -p --agent arc-lite` invocation a Claude Code session
+    already makes; a plain HTML/JS chatbox is the frontend. No new
+    dependency to install, no deployment, binds to localhost only.
+    - The user explicitly wants the door left open to a future cloud
+      deployment, but asked to seed that as an idea, not build toward it now
+      — recorded in `docs/backlog.md` rather than scheduled. The one
+      concession to that future made now: the relay logic is isolated
+      behind a single function (`ask_arc_lite()` in `server.py`) so
+      swapping the local subprocess call for a deployed API is a change to
+      one function, not a redesign — mirroring decision 2's "transport
+      change, not a redesign" principle for `kg-core`.
+    - **Not yet live-verified end to end.** Built and syntax-checked inside
+      a sandboxed Claude Code session, but that sandbox blocks both binding
+      a localhost port and nested outbound calls to `api.anthropic.com` —
+      properties of the sandbox, not evidence against the approach. First
+      real run needs to happen outside it, on the user's own machine.
+    - If this is ever actually deployed, it stops being a local-only
+      concern and the org's real path applies: TAP/CTAP via
+      Schooner/Jetstream, GitOps/ArgoCD, promoted dev → staging →
+      production via Drydock, same as the `query-service` v2 concern
+      already named in decision 2 and the constraint below.
+
 ## Constraints identified
 
 - **Rovo is cloud-hosted; the KG is local.** Rovo can't reach the local repo
