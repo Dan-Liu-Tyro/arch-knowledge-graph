@@ -29,7 +29,7 @@ with zero production access.
 - A minimal local grounding format: a handful of tagged references (id,
   title, status, source link, note) — deliberately not `kg-core`'s full
   schema.
-- A local persona ("Arc Lite") mirroring Arc's Constitution shape,
+- A local persona ("lite Arc") mirroring Arc's Constitution shape,
   grounded only on the files in `constitution/`.
 - Comparing answers with and without that grounding present, on real
   questions, entirely locally.
