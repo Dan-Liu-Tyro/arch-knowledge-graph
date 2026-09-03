@@ -321,15 +321,24 @@ Resolved since first draft:
 - Atlassian MCP connector capability — answered under Constraints above
   (Confluence/Jira CRUD and search, no Rovo agent invocation).
 - Repo location/name and whether to `git init` — done. This workspace is the
-  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default,
-  protected branch that only moves via reviewed PR, per org change-management
-  standards.
+  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default
+  branch, intended per org change-management standards to move only via
+  reviewed PR. **Correction, 2026-09-03:** checked GitHub branch protection
+  directly (`gh api .../branches/main/protection`) rather than assuming the
+  earlier note was still accurate — `main` has no branch-protection rule
+  configured; nothing on GitHub currently enforces the "only via PR" intent.
+  Not fixed as part of this entry; flagged so it isn't silently relied on.
 - **Branching during the design phase:** day-to-day work happens on a
   long-lived `plan` branch rather than a PR per change, by explicit request —
   "create branch called plan... until we reach a milestone" — to keep pace as
   a solo effort without per-change review friction. `main` is unaffected by
-  this and stays PR-gated. The milestone that triggers a `plan → main` PR was
-  named as a trigger up front but never made concrete; see Open questions.
+  this and stays PR-gated by convention. **Resolved 2026-09-03:** the
+  milestone was named as a trigger up front but left unconcretized; the user
+  stated directly that the plan stage is done, which is what makes it
+  concrete — not a fixed deliverable list. That call opened PR merging
+  `plan` → `main`, folding in everything decided since PR #1 (the KG schema
+  draft, the full `meta/` tier, `component-model.md`, `program-roadmap.md`,
+  `local-agent`, and `query-service`'s README).
 
 ## Next steps
 
