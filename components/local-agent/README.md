@@ -40,9 +40,37 @@ with zero production access.
   until there's evidence the thin version is insufficient.
 - Being mistaken for the real Arc or ArchWorker. Every file here says so.
 
+## UI
+
+`ui/server.py` is a local-only HTML relay: a stdlib-only Python HTTP server
+(no dependencies to install) that serves `ui/index.html` — a plain chatbox,
+no framework — and relays `POST /ask` to a headless `claude -p --agent
+arc-lite --output-format json` call, the same subagent invocation a Claude
+Code session already makes, just automated instead of typed.
+`ui/arc-lite.sh {start|stop|restart|status}` runs it as a background
+process (pid + log under `ui/.run/`, gitignored) so it doesn't tie up a
+terminal; open `http://127.0.0.1:8765` once it's started. Binds to
+localhost only; nothing is exposed beyond the machine it runs on.
+
+The one seam is `ask_arc_lite()` in `server.py` — swapping the local
+subprocess call for a real deployed API call later is a change to that one
+function, not a redesign, mirroring decision 2's "transport change, not a
+redesign" principle. Whether this UI is ever worth deploying beyond that is
+explicitly deferred — see `docs/backlog.md` — this is single-user-local
+only, built for one person's own use, not multi-user or production traffic.
+
+Not yet live-verified end to end: built and syntax-checked inside a
+sandboxed Claude Code session, but that same sandbox blocks both binding a
+localhost port and nested outbound calls to `api.anthropic.com` — properties
+of the sandbox the code was written in, not evidence against the approach.
+First real run (start the server, load the page, ask a question) needs to
+happen outside that sandbox, on the user's own machine.
+
 ## Depends on
 
-Nothing in this repo, deliberately — not even `kg-core`. This is a
+Nothing in this repo, deliberately — not even `kg-core`. The UI adds a
+runtime dependency on the `claude` CLI being on `PATH` and authenticated,
+but still nothing on another component in this repo. This is a
 temporary decoupling: `kg-core`'s schema targets the full graph (program
 milestone 2.1, not now — see
 [`docs/program-roadmap.md`](../../docs/program-roadmap.md)), and forcing
@@ -56,14 +84,24 @@ meant to be a permanent second schema.
 
 Nothing yet.
 
-## How to use it (MVP interaction — no new tooling)
+## How to use it
 
-Ask a Claude Code session in this repo to act as lite Arc, grounded only
-on `constitution/00-soul.md` through `04-procedure-memory.md`. That is
-the entire mechanism for now — no subagent definition file, no new
-script. Formalizing this as a reusable Claude Code subagent
-(`.claude/agents/`) is a reasonable next step once the Constitution
-content has been used and adjusted a few times, not before.
+Invoke the `arc-lite` subagent (`.claude/agents/arc-lite.md`) in a Claude
+Code session in this repo, or ask a session to act as Arc Lite directly.
+Either way the mechanism is the same: read `constitution/00-soul.md`
+through `04-procedure-memory.md` fresh each time and follow
+`01-working-protocol.md` exactly — the subagent file only points at those
+five files, it does not duplicate their content, so editing the
+constitution is enough to change Arc Lite's behavior without touching the
+subagent definition.
+
+The subagent file was created ahead of this component's original
+guidance to wait until the Constitution content had been used and
+adjusted "a few times" first — a deliberate, explicit choice made when
+asked, not a default. That means the Constitution content is less
+battle-tested than the original sequencing intended; treat early answers
+from it with correspondingly more scrutiny until real questions have
+exercised `02-canonical-sources.md` a few times.
 
 ## Status
 

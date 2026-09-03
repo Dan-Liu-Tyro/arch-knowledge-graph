@@ -220,6 +220,46 @@ plain RAG.
      this repo being open, which no file under `meta/` can do. These were
      never lived experience distilled from working on this project, so
      they were never in scope for this decision.
+9. **Formalized Arc Lite as a persisted subagent (`.claude/agents/arc-lite.md`)
+   immediately, overriding `components/local-agent/README.md`'s original
+   sequencing.** That README had said formalizing a subagent was reasonable
+   "once the Constitution content has been used and adjusted a few times, not
+   before" — at the point this was requested, the only uses had been two
+   synthetic questions invented to demonstrate the mechanism, not real
+   architecture questions. The tradeoff was surfaced explicitly and the user
+   chose to formalize now anyway rather than wait. The subagent file points at
+   `constitution/00-soul.md` through `04-procedure-memory.md` rather than
+   duplicating their content, so this doesn't fork Arc Lite's definition —
+   editing the constitution still changes its behavior with no subagent-file
+   change required. Accepted consequence: the Constitution content is
+   correspondingly less battle-tested than the original sequencing intended,
+   so early Arc Lite answers deserve more scrutiny until real questions have
+   exercised `constitution/02-canonical-sources.md` a few times.
+
+10. **Added a local-only HTML relay UI for Arc Lite (`components/local-agent/ui/`),
+    for the user's own single-person use, not a multi-user or production
+    surface.** A stdlib-only Python server relays `POST /ask` to the same
+    headless `claude -p --agent arc-lite` invocation a Claude Code session
+    already makes; a plain HTML/JS chatbox is the frontend. No new
+    dependency to install, no deployment, binds to localhost only.
+    - The user explicitly wants the door left open to a future cloud
+      deployment, but asked to seed that as an idea, not build toward it now
+      — recorded in `docs/backlog.md` rather than scheduled. The one
+      concession to that future made now: the relay logic is isolated
+      behind a single function (`ask_arc_lite()` in `server.py`) so
+      swapping the local subprocess call for a deployed API is a change to
+      one function, not a redesign — mirroring decision 2's "transport
+      change, not a redesign" principle for `kg-core`.
+    - **Not yet live-verified end to end.** Built and syntax-checked inside
+      a sandboxed Claude Code session, but that sandbox blocks both binding
+      a localhost port and nested outbound calls to `api.anthropic.com` —
+      properties of the sandbox, not evidence against the approach. First
+      real run needs to happen outside it, on the user's own machine.
+    - If this is ever actually deployed, it stops being a local-only
+      concern and the org's real path applies: TAP/CTAP via
+      Schooner/Jetstream, GitOps/ArgoCD, promoted dev → staging →
+      production via Drydock, same as the `query-service` v2 concern
+      already named in decision 2 and the constraint below.
 
 ## Constraints identified
 
@@ -281,15 +321,24 @@ Resolved since first draft:
 - Atlassian MCP connector capability — answered under Constraints above
   (Confluence/Jira CRUD and search, no Rovo agent invocation).
 - Repo location/name and whether to `git init` — done. This workspace is the
-  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default,
-  protected branch that only moves via reviewed PR, per org change-management
-  standards.
+  repo (`arch-knowledge-graph`), pushed to GitHub, with `main` as the default
+  branch, intended per org change-management standards to move only via
+  reviewed PR. **Correction, 2026-09-03:** checked GitHub branch protection
+  directly (`gh api .../branches/main/protection`) rather than assuming the
+  earlier note was still accurate — `main` has no branch-protection rule
+  configured; nothing on GitHub currently enforces the "only via PR" intent.
+  Not fixed as part of this entry; flagged so it isn't silently relied on.
 - **Branching during the design phase:** day-to-day work happens on a
   long-lived `plan` branch rather than a PR per change, by explicit request —
   "create branch called plan... until we reach a milestone" — to keep pace as
   a solo effort without per-change review friction. `main` is unaffected by
-  this and stays PR-gated. The milestone that triggers a `plan → main` PR was
-  named as a trigger up front but never made concrete; see Open questions.
+  this and stays PR-gated by convention. **Resolved 2026-09-03:** the
+  milestone was named as a trigger up front but left unconcretized; the user
+  stated directly that the plan stage is done, which is what makes it
+  concrete — not a fixed deliverable list. That call opened PR merging
+  `plan` → `main`, folding in everything decided since PR #1 (the KG schema
+  draft, the full `meta/` tier, `component-model.md`, `program-roadmap.md`,
+  `local-agent`, and `query-service`'s README).
 
 ## Next steps
 

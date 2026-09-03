@@ -36,3 +36,12 @@ being worked, or delete it here once it's superseded.
   2026-08-26: decide whether/how ad-hoc search results get a trust label
   (most likely a third, lower tier) before this is used for genuine
   discovery rather than known-reference lookup.
+- **Cloud-deployable Arc Lite UI.** Decision 10 built a local-only HTML relay
+  (`components/local-agent/ui/`) for one person's own use. Raised
+  2026-09-03: the user wants the option to deploy it beyond localhost later,
+  kept open but not designed now. If pulled forward, it is not a local
+  concern anymore — it goes through the org's real path (TAP/CTAP via
+  Schooner/Jetstream, GitOps/ArgoCD, dev → staging → production via
+  Drydock), which also means deciding auth/access control, since a
+  deployed version is no longer single-user-implicit-trust like the local
+  one.

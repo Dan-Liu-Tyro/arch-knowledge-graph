@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A local, git-versioned knowledge graph (KG) that curates Tyro's architecture
+A repo that curates Tyro's architecture
 knowledge — principles, guardrails, patterns, reference architectures, decisions —
-as the grounding source for the Architecture stream's Rovo agent (AI uplift
-program), replacing raw Confluence RAG over 100+ inconsistent pages.
+as the grounding source for the Architecture stream's AI agent to uplift the internal 
+business process as well as offer Architecture service to wider steams such as architecture sparring preparation, architecture/design review, etc.
 
 **Status: design phase.** A schema draft and component scaffolding exist; no code,
 build system, or test suite is committed. Do not invent or assume build/lint/test
