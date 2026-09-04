@@ -261,6 +261,46 @@ plain RAG.
       production via Drydock, same as the `query-service` v2 concern
       already named in decision 2 and the constraint below.
 
+11. **Reframed Arc Lite's trajectory from a disposable grounded-vs-ungrounded
+    A/B tool to a potential longer-lived local Arc with its own skill set,
+    and — as a direct consequence — gave it live Confluence **read** access,
+    reversing part of the "not connected to live Confluence" boundary decision
+    6 and this component's README had called non-negotiable.** Surfaced the
+    tension explicitly before acting on it: that boundary existed specifically
+    so the grounded/ungrounded comparison stayed clean (an "ungrounded"
+    answer could otherwise come from a live Confluence search instead of
+    genuinely having no source), and so Arc Lite wouldn't drift into
+    duplicating Arc/Rovo's own retrieval role, which decision 6 explicitly
+    rules out. The user's response resolved the tension by changing Arc
+    Lite's intended lifespan, not by dismissing the concern: it's no longer
+    scoped as a one-shot MVP experiment to be thrown away, but a candidate to
+    grow into a real local agent, for which "local files only, forever" was
+    always going to be too narrow.
+    - **Scope held deliberately narrow: read, not write.** Arc Lite may now
+      search and fetch live Confluence pages. It still may not write to
+      Confluence (labels, status badges, or otherwise) — that remains
+      gated on confirming a genuinely non-production space first, per
+      `docs/mvp-proposal.md`'s existing hard constraint, which this decision
+      does not relax.
+    - **New concept: an ignore list, separate from `02-canonical-sources.md`'s
+      trusted-source vocabulary.** Where `02-canonical-sources.md` says "these
+      pages are settled/superseded/conflicting guidance," the ignore list says
+      "exclude this page from consideration even if it looks topically
+      relevant" (stale drafts, scratch pages, noise) — a different kind of
+      judgment, kept as its own file, `constitution/05-ignore-list.md`, rather
+      than a sixth status value in the existing vocabulary table.
+    - **What this doesn't yet include:** the two inputs the still-`Undecided`
+      MVP proposal needs (a real 8–15 question set; known canonical/superseded
+      pages to bootstrap the signal) remain outstanding and unaffected by this
+      decision.
+    - **What needed the user's own hand, not Claude's:** `.claude/agents/`
+      is sandbox-write-protected from Claude Code itself (see
+      `meta/procedural-memory/universal.md` — not project-specific, so it
+      lives there rather than in `lessons.md`), so the actual tool grant and
+      constitution-file pointer list in `.claude/agents/arc-lite.md` had to
+      be hand-edited by the user; this entry and the constitution-file
+      content changes were made by Claude.
+
 ## Constraints identified
 
 - **Rovo is cloud-hosted; the KG is local.** Rovo can't reach the local repo
